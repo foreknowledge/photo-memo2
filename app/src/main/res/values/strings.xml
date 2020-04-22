@@ -1,3 +1,27 @@
 <resources>
-	<string name="app_name">Photo Memo 2</string>
+	<string name="app_name">포토메모장</string>
+
+	<string name="text_save">저장</string>
+	<string name="text_cancel">취소</string>
+	<string name="text_adjust">적용</string>
+	<string name="text_hide">숨기기</string>
+	<string name="text_memo_title">제목</string>
+	<string name="text_memo_content">메모</string>
+	<string name="text_add_image">이미지 첨부</string>
+	<string name="text_image_preview">이미지 미리보기</string>
+	<string name="text_image_url">이미지 url 입력</string>
+
+	<string name="text_image_description">썸네일 이미지</string>
+	<string name="text_memo_notice">메모를 추가 해 보세요.</string>
+
+	<string name="btn_add_image">+ 추가</string>
+
+	<string-array name="option_add_image">
+		<item>갤러리에서 가져오기</item>
+		<item>카메라로 촬영하기</item>
+		<item>외부 이미지 주소로 가져오기</item>
+	</string-array>
+	<string name="delete_message">메모를 삭제하시겠습니까?</string>
+	<string name="btn_ok_text">삭제</string>
+	<string name="btn_cancel_text">취소</string>
 </resources>
