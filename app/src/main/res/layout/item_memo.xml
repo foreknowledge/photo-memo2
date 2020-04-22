@@ -4,7 +4,7 @@
     <data>
         <import type="android.view.View" />
         <variable
-            name="memo"
+            name="item"
             type="com.foreknowledge.photomemo2.model.data.Memo" />
     </data>
 
@@ -39,21 +39,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
-                    android:text="@{memo.title}"
+                    android:text="@{item.title}"
                     android:textColor="@android:color/black"
                     android:textStyle="bold"
                     android:textSize="20sp"
                     android:maxLines="1"
-                    android:visibility="@{memo.title.empty ? View.INVISIBLE : View.VISIBLE}"
+                    android:visibility="@{item.title.empty ? View.INVISIBLE : View.VISIBLE}"
                     android:ellipsize="end" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="@{memo.content}"
+                    android:text="@{item.content}"
                     android:textSize="16sp"
-                    android:maxLines="@{memo.title.empty ? 4 : 2}"
-                    android:visibility="@{memo.content.empty ? View.INVISIBLE : View.VISIBLE}"
+                    android:maxLines="@{item.title.empty ? 4 : 2}"
+                    android:visibility="@{item.content.empty ? View.INVISIBLE : View.VISIBLE}"
                     android:ellipsize="end" />
 
             </LinearLayout>
@@ -64,7 +64,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginEnd="10dp"
-                android:visibility="@{memo.imagePaths.size() == 0 ? View.INVISIBLE : View.VISIBLE}"
+                android:visibility="@{item.imagePaths.size() == 0 ? View.INVISIBLE : View.VISIBLE}"
                 app:cardCornerRadius="10dp" >
 
                 <FrameLayout
@@ -76,7 +76,7 @@
                         android:layout_height="80dp"
                         android:scaleType="centerCrop"
                         android:contentDescription="@string/text_image_description"
-                        app:bind_url_image="@{memo.imagePaths.get(0)}"/>
+                        app:bind_url_image="@{item.imagePaths.get(0)}"/>
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="25dp"
@@ -93,7 +93,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="@{String.valueOf(memo.imagePaths.size())}"
+                            android:text="@{String.valueOf(item.imagePaths.size())}"
                             android:textColor="@android:color/white" />
 
                     </androidx.cardview.widget.CardView>
