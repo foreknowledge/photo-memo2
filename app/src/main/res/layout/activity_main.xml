@@ -3,7 +3,7 @@
 
 	<data>
 		<import type="android.view.View" />
-		<variable name="isListEmpty" type="Boolean" />
+		<variable name="isEmptyList" type="Boolean" />
 	</data>
 
 	<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -30,7 +30,7 @@
 			android:layout_marginBottom="80dp"
 			android:text="@string/text_memo_notice"
 			android:textSize="18sp"
-			android:visibility="@{isListEmpty ? View.VISIBLE : View.INVISIBLE}"
+			android:visibility="@{isEmptyList ? View.VISIBLE : View.INVISIBLE}"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintLeft_toLeftOf="parent"
 			app:layout_constraintRight_toRightOf="parent"

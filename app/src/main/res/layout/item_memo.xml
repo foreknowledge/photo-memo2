@@ -4,97 +4,97 @@
     <data>
         <import type="android.view.View" />
         <variable
-            name="item"
-            type="com.foreknowledge.photomemo2.model.data.Memo" />
+          name="item"
+          type="com.foreknowledge.photomemo2.model.data.Memo" />
     </data>
 
     <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:foreground="?attr/selectableItemBackground"
-        app:cardCornerRadius="20dp"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="10dp"
+      android:layout_marginEnd="10dp"
+      android:layout_marginTop="5dp"
+      android:layout_marginBottom="5dp"
+      android:foreground="?attr/selectableItemBackground"
+      app:cardCornerRadius="20dp"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@android:color/white">
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal"
+          android:background="@android:color/white">
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:orientation="vertical">
+              android:layout_width="0dp"
+              android:layout_height="match_parent"
+              android:layout_weight="1"
+              android:layout_marginStart="15dp"
+              android:layout_marginEnd="10dp"
+              android:layout_marginTop="10dp"
+              android:layout_marginBottom="10dp"
+              android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:text="@{item.title}"
-                    android:textColor="@android:color/black"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:maxLines="1"
-                    android:visibility="@{item.title.empty ? View.INVISIBLE : View.VISIBLE}"
-                    android:ellipsize="end" />
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginBottom="5dp"
+                  android:text="@{item.title}"
+                  android:textColor="@android:color/black"
+                  android:textStyle="bold"
+                  android:textSize="20sp"
+                  android:maxLines="1"
+                  android:visibility="@{item.title.empty ? View.INVISIBLE : View.VISIBLE}"
+                  android:ellipsize="end" />
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="@{item.content}"
-                    android:textSize="16sp"
-                    android:maxLines="@{item.title.empty ? 4 : 2}"
-                    android:visibility="@{item.content.empty ? View.INVISIBLE : View.VISIBLE}"
-                    android:ellipsize="end" />
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:text="@{item.content}"
+                  android:textSize="16sp"
+                  android:maxLines="@{item.title.empty ? 4 : 2}"
+                  android:visibility="@{item.content.empty ? View.INVISIBLE : View.VISIBLE}"
+                  android:ellipsize="end" />
 
             </LinearLayout>
 
             <androidx.cardview.widget.CardView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginEnd="10dp"
-                android:visibility="@{item.imagePaths.size() == 0 ? View.INVISIBLE : View.VISIBLE}"
-                app:cardCornerRadius="10dp" >
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="10dp"
+              android:layout_marginBottom="10dp"
+              android:layout_marginEnd="10dp"
+              android:visibility="@{item.photoPaths.length() == 0 ? View.INVISIBLE : View.VISIBLE}"
+              app:cardCornerRadius="10dp" >
 
                 <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content">
 
                     <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:scaleType="centerCrop"
-                        android:contentDescription="@string/text_image_description"
-                        app:bind_url_image="@{item.imagePaths.get(0)}"/>
+                      android:layout_width="80dp"
+                      android:layout_height="80dp"
+                      android:scaleType="centerCrop"
+                      android:contentDescription="@string/text_image_description"
+                      app:bind_url_image="@{item.photoPaths}"/>
 
                     <androidx.cardview.widget.CardView
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_gravity="bottom|end"
-                        android:layout_marginEnd="5dp"
-                        android:layout_marginBottom="5dp"
-                        app:cardCornerRadius="15dp"
-                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                        card_view:cardBackgroundColor="@color/colorGrayTransparent"
-                        card_view:cardElevation="0dp">
+                      android:layout_width="25dp"
+                      android:layout_height="25dp"
+                      android:layout_gravity="bottom|end"
+                      android:layout_marginEnd="5dp"
+                      android:layout_marginBottom="5dp"
+                      app:cardCornerRadius="15dp"
+                      xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                      card_view:cardBackgroundColor="@color/colorGrayTransparent"
+                      card_view:cardElevation="0dp">
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="@{String.valueOf(item.imagePaths.size())}"
-                            android:textColor="@android:color/white" />
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_gravity="center"
+                          android:textColor="@android:color/white"
+                          app:bind_images_count="@{item.photoPaths}" />
 
                     </androidx.cardview.widget.CardView>
 

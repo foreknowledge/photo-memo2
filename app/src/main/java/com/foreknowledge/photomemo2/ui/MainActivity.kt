@@ -1,6 +1,7 @@
 package com.foreknowledge.photomemo2.ui
 
 import android.os.Bundle
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.foreknowledge.photomemo2.R
 import com.foreknowledge.photomemo2.adapter.MemoRecyclerAdapter
@@ -21,7 +22,20 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 		super.onCreate(savedInstanceState)
 
 		with (viewModel) {
+			binding.isEmptyList = true
+			binding.lifecycleOwner = this@MainActivity
+			initMemoList()
+		}
 
+		subscribeUI()
+	}
+
+	private fun subscribeUI() {
+		with (viewModel) {
+			memoList.observe(this@MainActivity, Observer {
+				memoRecyclerAdapter.replaceItems(it)
+				binding.isEmptyList = memoList.value?.size == 0
+			})
 		}
 	}
 }
