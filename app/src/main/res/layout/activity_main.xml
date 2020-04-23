@@ -44,6 +44,7 @@
 			android:layout_gravity="bottom|end"
 			android:backgroundTint="@android:color/holo_orange_light"
 			android:src="@drawable/ic_add"
+			android:onClick="createMemo"
 			app:borderWidth="0dp"
 			app:fabSize="normal"
 			app:layout_constraintBottom_toBottomOf="parent"

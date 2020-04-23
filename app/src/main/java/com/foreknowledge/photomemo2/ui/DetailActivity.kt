@@ -1,13 +1,30 @@
 package com.foreknowledge.photomemo2.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.foreknowledge.photomemo2.R
+import com.foreknowledge.photomemo2.base.BaseActivity
+import com.foreknowledge.photomemo2.databinding.ActivityDetailBinding
+import com.foreknowledge.photomemo2.viewmodel.MemoViewModel
 
-class DetailActivity : AppCompatActivity() {
+class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_detail) {
+	private val viewModel by lazy {
+		ViewModelProvider(this).get(MemoViewModel::class.java)
+	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		setContentView(R.layout.activity_detail)
+
+		binding.lifecycleOwner = this
+		binding.goBefore.setOnClickListener { finish() }
+
+		viewModel.getMemo(intent.getLongExtra("memo_id", 0))
+
+		subscribeUI()
+	}
+
+	private fun subscribeUI() = with(viewModel) {
+		currentMemo.observe(this@DetailActivity, Observer { binding.item = it })
 	}
 }

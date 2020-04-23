@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
+	<data>
+		<variable
+			name="item"
+			type="com.foreknowledge.photomemo2.model.data.Memo" />
+	</data>
+
 	<FrameLayout
 		xmlns:android="http://schemas.android.com/apk/res/android"
 		xmlns:tools="http://schemas.android.com/tools"
@@ -21,6 +27,7 @@
 				app:popupTheme="@style/Widget.AppCompat.Toolbar">
 
 				<Button
+					android:id="@+id/go_before"
 					android:layout_width="30dp"
 					android:layout_height="30dp"
 					android:background="@drawable/ic_arrow_back"/>
@@ -33,7 +40,8 @@
 					android:background="@android:color/transparent"
 					android:textColor="@color/colorPrimary"
 					android:text="@string/text_save"
-					android:textSize="20sp"/>
+					android:textSize="20sp"
+					android:onClick="saveMemo"/>
 
 			</androidx.appcompat.widget.Toolbar>
 
@@ -55,6 +63,7 @@
 					<EditText
 						android:id="@+id/edit_memo_title"
 						android:hint="@string/text_memo_title"
+						android:text="@{item.title}"
 						android:textStyle="bold"
 						android:importantForAutofill="no"
 						android:inputType="text"
@@ -70,6 +79,7 @@
 					<EditText
 						android:id="@+id/edit_memo_content"
 						android:hint="@string/text_memo_content"
+						android:text="@{item.content}"
 						android:minHeight="200dp"
 						android:maxLength="1000000000"
 						android:gravity="top"

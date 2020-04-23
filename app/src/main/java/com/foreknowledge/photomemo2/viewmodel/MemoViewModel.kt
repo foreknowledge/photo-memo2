@@ -10,16 +10,20 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 /**
- * Create by Yeji on 22,April,2020.
+ * Create by Yeji on 23,April,2020.
  */
-class MainViewModel : ViewModel() {
+class MemoViewModel : ViewModel() {
     private val repository = MemoRepository
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
-    private val _memoList = MutableLiveData(mutableListOf<Memo>())
-    val memoList: LiveData<MutableList<Memo>> = _memoList
+    private val _currentMemo = MutableLiveData<Memo>()
+    val currentMemo: LiveData<Memo> = _currentMemo
 
-    fun initMemoList() = coroutineScope.launch {
-        _memoList.postValue(repository.getAllMemos().toMutableList())
+    fun getMemo(id: Long) = coroutineScope.launch {
+        _currentMemo.postValue(repository.getMemo(id))
+    }
+
+    fun addMemo(memo: Memo) = coroutineScope.launch {
+        repository.addMemo(memo)
     }
 }
