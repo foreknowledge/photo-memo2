@@ -6,6 +6,9 @@
         <variable
           name="item"
           type="com.foreknowledge.photomemo2.model.data.Memo" />
+        <variable
+            name="listener"
+            type="com.foreknowledge.photomemo2.listener.OnItemClickListener" />
     </data>
 
     <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -16,6 +19,7 @@
       android:layout_marginTop="5dp"
       android:layout_marginBottom="5dp"
       android:foreground="?attr/selectableItemBackground"
+			android:onClick="@{() -> listener.onClick(item)}"
       app:cardCornerRadius="20dp"
       xmlns:app="http://schemas.android.com/apk/res-auto">
 

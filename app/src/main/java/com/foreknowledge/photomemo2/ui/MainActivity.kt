@@ -10,6 +10,8 @@ import com.foreknowledge.photomemo2.R
 import com.foreknowledge.photomemo2.adapter.MemoRecyclerAdapter
 import com.foreknowledge.photomemo2.base.BaseActivity
 import com.foreknowledge.photomemo2.databinding.ActivityMainBinding
+import com.foreknowledge.photomemo2.listener.OnItemClickListener
+import com.foreknowledge.photomemo2.model.data.Memo
 import com.foreknowledge.photomemo2.viewmodel.MainViewModel
 
 @Suppress("UNUSED_PARAMETER")
@@ -23,11 +25,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 
-		binding.isEmptyList = true
 		binding.lifecycleOwner = this@MainActivity
 		binding.memoList.apply {
 			layoutManager = LinearLayoutManager(this@MainActivity)
-			adapter = memoRecyclerAdapter
+			adapter = memoRecyclerAdapter.apply {
+				onClickListener = setItemClickListener()
+			}
 		}
 
 		subscribeUI()
@@ -37,6 +40,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 		super.onResume()
 
 		viewModel.initMemoList()
+	}
+
+	private fun setItemClickListener() = object: OnItemClickListener<Memo> {
+		override fun onClick(item: Memo) {
+			startActivity(
+					Intent(this@MainActivity, DetailActivity::class.java)
+							.apply { putExtra("memo_id", item.id) }
+			)
+		}
 	}
 
 	private fun subscribeUI() {
