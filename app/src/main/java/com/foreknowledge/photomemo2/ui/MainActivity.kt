@@ -6,11 +6,12 @@ import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.foreknowledge.photomemo2.EXTRA_MEMO_ID
 import com.foreknowledge.photomemo2.R
 import com.foreknowledge.photomemo2.adapter.MemoRecyclerAdapter
 import com.foreknowledge.photomemo2.base.BaseActivity
 import com.foreknowledge.photomemo2.databinding.ActivityMainBinding
-import com.foreknowledge.photomemo2.listener.OnItemClickListener
+import com.foreknowledge.photomemo2.listener.OnItemSingleClickListener
 import com.foreknowledge.photomemo2.model.data.Memo
 import com.foreknowledge.photomemo2.viewmodel.MainViewModel
 
@@ -42,11 +43,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 		viewModel.initMemoList()
 	}
 
-	private fun setItemClickListener() = object: OnItemClickListener<Memo> {
-		override fun onClick(item: Memo) {
+	private fun setItemClickListener() = object: OnItemSingleClickListener<Memo>() {
+		override fun onSingleClick(item: Memo) {
 			startActivity(
 					Intent(this@MainActivity, DetailActivity::class.java)
-							.apply { putExtra("memo_id", item.id) }
+							.apply { putExtra(EXTRA_MEMO_ID, item.id) }
 			)
 		}
 	}

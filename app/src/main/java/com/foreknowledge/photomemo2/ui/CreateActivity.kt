@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.foreknowledge.photomemo2.EXTRA_MEMO_ID
 import com.foreknowledge.photomemo2.R
 import com.foreknowledge.photomemo2.base.BaseActivity
 import com.foreknowledge.photomemo2.databinding.ActivityCreateBinding
@@ -23,7 +24,7 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 		binding.lifecycleOwner = this@CreateActivity
 		binding.goBefore.setOnClickListener { finish() }
 
-		viewModel.getMemo(intent.getLongExtra("memo_id", 0))
+		viewModel.getMemo(intent.getLongExtra(EXTRA_MEMO_ID, 0))
 
 		subscribeUI()
 	}
