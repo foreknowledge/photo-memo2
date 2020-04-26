@@ -35,7 +35,7 @@
 				android:background="@drawable/ic_delete"
 				android:layout_marginEnd="15dp"
 				android:layout_gravity="end"
-				android:onClick="deleteMemo"/>
+				android:onClick="showAlertDialog"/>
 
 			<Button
 				android:layout_width="30dp"

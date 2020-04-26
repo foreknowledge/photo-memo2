@@ -1,5 +1,6 @@
 package com.foreknowledge.photomemo2.ui
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -37,9 +38,16 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
 		msg.observe(this@DetailActivity, Observer { ToastUtil.makeToast(it) })
 	}
 
-	fun deleteMemo(view: View) = with (viewModel) {
+	private fun deleteMemo() = with (viewModel) {
 		deleteMemo(currentMemo.value!!.id)
 		finish()
+	}
+
+	fun showAlertDialog(view: View) {
+		AlertDialog.Builder(this)
+				.setMessage(getString(R.string.delete_message))
+				.setPositiveButton( getString(R.string.btn_ok_text) ) { _, _ -> deleteMemo() }
+				.setNegativeButton( getString(R.string.btn_cancel_text) ) { dialog, _ -> dialog.dismiss() }.show()
 	}
 
 	fun editMemo(view: View) =
