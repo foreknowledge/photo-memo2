@@ -6,6 +6,9 @@
         <variable
           name="item"
           type="com.foreknowledge.photomemo2.model.data.Memo" />
+        <variable
+            name="listener"
+            type="com.foreknowledge.photomemo2.listener.OnItemClickListener" />
     </data>
 
     <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -16,6 +19,7 @@
       android:layout_marginTop="5dp"
       android:layout_marginBottom="5dp"
       android:foreground="?attr/selectableItemBackground"
+			android:onClick="@{() -> listener.onClick(item)}"
       app:cardCornerRadius="20dp"
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -44,7 +48,7 @@
                   android:textStyle="bold"
                   android:textSize="20sp"
                   android:maxLines="1"
-                  android:visibility="@{item.title.empty ? View.INVISIBLE : View.VISIBLE}"
+                  android:visibility="@{item.title.empty ? View.GONE : View.VISIBLE}"
                   android:ellipsize="end" />
 
                 <TextView
@@ -53,7 +57,7 @@
                   android:text="@{item.content}"
                   android:textSize="16sp"
                   android:maxLines="@{item.title.empty ? 4 : 2}"
-                  android:visibility="@{item.content.empty ? View.INVISIBLE : View.VISIBLE}"
+                  android:visibility="@{item.content.empty ? View.GONE : View.VISIBLE}"
                   android:ellipsize="end" />
 
             </LinearLayout>
@@ -64,7 +68,7 @@
               android:layout_marginTop="10dp"
               android:layout_marginBottom="10dp"
               android:layout_marginEnd="10dp"
-              android:visibility="@{item.photoPaths.length() == 0 ? View.INVISIBLE : View.VISIBLE}"
+              android:visibility="@{item.photoPaths.length() == 0 ? View.GONE : View.VISIBLE}"
               app:cardCornerRadius="10dp" >
 
                 <FrameLayout

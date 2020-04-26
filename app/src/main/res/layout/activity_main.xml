@@ -14,9 +14,11 @@
 		tools:context=".ui.MainActivity">
 
 		<androidx.recyclerview.widget.RecyclerView
-			android:id="@+id/memo_list"
-			android:layout_width="0dp"
-			android:layout_height="0dp"
+			android:id="@+id/memo_recycler_view"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_marginTop="8dp"
+			android:layout_marginBottom="8dp"
 			tools:listitem="@layout/item_memo"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintLeft_toLeftOf="parent"
@@ -44,6 +46,7 @@
 			android:layout_gravity="bottom|end"
 			android:backgroundTint="@android:color/holo_orange_light"
 			android:src="@drawable/ic_add"
+			android:onClick="createMemo"
 			app:borderWidth="0dp"
 			app:fabSize="normal"
 			app:layout_constraintBottom_toBottomOf="parent"

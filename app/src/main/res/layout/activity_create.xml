@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+	<data>
+		<variable
+			name="item"
+			type="com.foreknowledge.photomemo2.model.data.Memo" />
+	</data>
+
+	<FrameLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:tools="http://schemas.android.com/tools"
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent" >
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:orientation="vertical"
+			tools:context=".ui.CreateActivity">
+
+			<androidx.appcompat.widget.Toolbar
+				android:layout_width="match_parent"
+				android:layout_height="?attr/actionBarSize"
+				android:background="@android:color/white"
+				app:popupTheme="@style/Widget.AppCompat.Toolbar">
+
+				<Button
+					android:id="@+id/go_before"
+					android:layout_width="30dp"
+					android:layout_height="30dp"
+					android:background="@drawable/ic_arrow_back"/>
+
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginEnd="15dp"
+					android:layout_gravity="end"
+					android:background="@android:color/transparent"
+					android:textColor="@color/colorPrimary"
+					android:text="@string/text_save"
+					android:textSize="20sp"
+					android:onClick="saveMemo"/>
+
+			</androidx.appcompat.widget.Toolbar>
+
+			<View
+				android:layout_width="match_parent"
+				android:layout_height="5dp"
+				android:background="@color/colorGray1" />
+
+			<ScrollView
+				android:id="@+id/scroll_view"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="vertical">
+
+					<EditText
+						android:id="@+id/edit_memo_title"
+						android:hint="@string/text_memo_title"
+						android:text="@{item.title}"
+						android:textStyle="bold"
+						android:importantForAutofill="no"
+						android:inputType="text"
+						android:maxLines="1"
+						android:maxLength="50"
+						style="@style/EditTextStyle"/>
+
+					<View
+						android:layout_width="match_parent"
+						android:layout_height="2dp"
+						android:background="@color/colorGray1" />
+
+					<EditText
+						android:id="@+id/edit_memo_content"
+						android:hint="@string/text_memo_content"
+						android:text="@{item.content}"
+						android:minHeight="200dp"
+						android:maxLength="1000000000"
+						android:gravity="top"
+						android:importantForAutofill="no"
+						android:inputType="textMultiLine"
+						style="@style/EditTextStyle"/>
+
+					<View
+						android:layout_width="match_parent"
+						android:layout_height="2dp"
+						android:background="@color/colorGray1" />
+
+					<LinearLayout
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:orientation="vertical"
+						android:background="@android:color/white">
+
+						<FrameLayout
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:layout_marginStart="20dp"
+							android:layout_marginEnd="10dp" >
+
+							<TextView
+								android:id="@+id/textView"
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content"
+								android:layout_gravity="center_vertical"
+								android:layout_marginStart="10dp"
+								android:text="@string/text_add_image"
+								android:textColor="@android:color/black"
+								android:textSize="20sp" />
+
+							<Button
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content"
+								android:layout_gravity="end"
+								android:background="@android:color/transparent"
+								android:textColor="@color/colorPrimary"
+								android:text="@string/btn_add_image"
+								android:textSize="18sp"/>
+
+						</FrameLayout>
+
+						<include
+							android:id="@+id/url_input_box"
+							layout="@layout/url_input_box"
+							android:visibility="gone"/>
+
+						<androidx.recyclerview.widget.RecyclerView
+							android:id="@+id/preview_recycler_view"
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:layout_marginStart="20dp"
+							android:layout_marginEnd="20dp"
+							android:layout_marginBottom="10dp"/>
+
+					</LinearLayout>
+
+				</LinearLayout>
+
+			</ScrollView>
+
+		</LinearLayout>
+
+		<RelativeLayout
+			android:id="@+id/loading_panel"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:background="#55000000"
+			android:gravity="center"
+			android:clickable="true"
+			android:focusable="true"
+			android:visibility="invisible">
+
+			<ProgressBar
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:indeterminate="true" />
+
+		</RelativeLayout>
+
+	</FrameLayout>
+
+</layout>

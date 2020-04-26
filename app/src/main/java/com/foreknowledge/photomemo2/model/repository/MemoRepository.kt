@@ -14,7 +14,7 @@ object MemoRepository {
 
 	suspend fun getMemo(id: Long): Memo? = memoDataSource.get(id)
 
-	suspend fun addMemo(memo: Memo) = memoDataSource.add(MemoEntity(memo.title, memo.content, memo.photoPaths))
+	suspend fun addMemo(memo: Memo) = memoDataSource.add(MemoEntity(memo.id, memo.title, memo.content, memo.photoPaths))
 
 	suspend fun deleteMemo(memoId: Long) = memoDataSource.delete(memoId)
 }

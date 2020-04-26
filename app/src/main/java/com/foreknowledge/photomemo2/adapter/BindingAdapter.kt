@@ -11,8 +11,9 @@ import com.bumptech.glide.Glide
 
 @BindingAdapter("bind_url_image")
 fun ImageView.bindUrlImage(url: String?) {
+    if (url == null) return
     Glide.with(context)
-        .load(url?.split(",")?.get(0))
+        .load(url.split(",")[0])
         .into(this)
 }
 
