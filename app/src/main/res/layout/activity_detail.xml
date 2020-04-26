@@ -64,6 +64,7 @@
 					android:textSize="20sp"
 					android:textStyle="bold"
 					android:textColor="@android:color/black"
+					android:visibility="@{item.title.empty ? View.GONE : View.VISIBLE}"
 					android:paddingTop="10dp"
 					android:paddingBottom="10dp"
 					android:paddingStart="30dp"
@@ -73,17 +74,18 @@
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:gravity="top"
+					android:background="@android:color/white"
+					android:text="@{item.content}"
+					android:textSize="18sp"
+					android:textColor="@android:color/black"
+					android:visibility="@{item.content.empty ? View.GONE : View.VISIBLE}"
 					android:paddingTop="10dp"
 					android:paddingBottom="10dp"
 					android:paddingStart="30dp"
-					android:paddingEnd="30dp"
-					android:background="@android:color/white"
-					android:text="@{item.content}"
-					android:textColor="@android:color/black"
-					android:textSize="18sp" />
+					android:paddingEnd="30dp" />
 
 				<androidx.recyclerview.widget.RecyclerView
-					android:id="@+id/photo_list"
+					android:id="@+id/photo_recycler_view"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:paddingTop="10dp"

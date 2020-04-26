@@ -16,7 +16,7 @@ class MainViewModel : ViewModel() {
     private val repository = MemoRepository
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
-    private val _memoList = MutableLiveData(mutableListOf<Memo>())
+    private val _memoList = MutableLiveData<MutableList<Memo>>()
     val memoList: LiveData<MutableList<Memo>> = _memoList
 
     fun initMemoList() = coroutineScope.launch {

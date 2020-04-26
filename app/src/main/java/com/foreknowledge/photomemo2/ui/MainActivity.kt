@@ -27,7 +27,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 		super.onCreate(savedInstanceState)
 
 		binding.lifecycleOwner = this@MainActivity
-		binding.memoList.apply {
+		binding.memoRecyclerView.apply {
 			layoutManager = LinearLayoutManager(this@MainActivity)
 			adapter = memoRecyclerAdapter.apply {
 				onClickListener = setItemClickListener()

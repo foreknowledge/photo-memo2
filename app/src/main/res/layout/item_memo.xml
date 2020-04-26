@@ -48,7 +48,7 @@
                   android:textStyle="bold"
                   android:textSize="20sp"
                   android:maxLines="1"
-                  android:visibility="@{item.title.empty ? View.INVISIBLE : View.VISIBLE}"
+                  android:visibility="@{item.title.empty ? View.GONE : View.VISIBLE}"
                   android:ellipsize="end" />
 
                 <TextView
@@ -57,7 +57,7 @@
                   android:text="@{item.content}"
                   android:textSize="16sp"
                   android:maxLines="@{item.title.empty ? 4 : 2}"
-                  android:visibility="@{item.content.empty ? View.INVISIBLE : View.VISIBLE}"
+                  android:visibility="@{item.content.empty ? View.GONE : View.VISIBLE}"
                   android:ellipsize="end" />
 
             </LinearLayout>
@@ -68,7 +68,7 @@
               android:layout_marginTop="10dp"
               android:layout_marginBottom="10dp"
               android:layout_marginEnd="10dp"
-              android:visibility="@{item.photoPaths.length() == 0 ? View.INVISIBLE : View.VISIBLE}"
+              android:visibility="@{item.photoPaths.length() == 0 ? View.GONE : View.VISIBLE}"
               app:cardCornerRadius="10dp" >
 
                 <FrameLayout
