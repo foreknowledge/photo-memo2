@@ -2,6 +2,7 @@ package com.foreknowledge.photomemo2.ui
 
 import android.os.Bundle
 import android.view.View
+import android.widget.EditText
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.foreknowledge.photomemo2.EXTRA_MEMO_ID
@@ -23,7 +24,6 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 
 		binding.lifecycleOwner = this@CreateActivity
 		binding.goBefore.setOnClickListener { finish() }
-
 		viewModel.getMemo(intent.getLongExtra(EXTRA_MEMO_ID, 0))
 
 		subscribeUI()
@@ -34,12 +34,14 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 		msg.observe(this@CreateActivity, Observer { ToastUtil.makeToast(it) })
 	}
 
-	fun saveMemo(view: View) {
-		with(binding) {
-			val memo = Memo(editMemoTitle.text.toString(), editMemoContent.text.toString())
-			viewModel.addMemo(memo)
-		}
-
+	fun saveMemo(view: View) = with(viewModel) {
+		addMemo(Memo(
+				currentMemo.value?.id ?: 0L,
+				binding.editMemoTitle.text(),
+				binding.editMemoContent.text()
+		))
 		finish()
 	}
+
+	private fun EditText.text() = text.toString()
 }
