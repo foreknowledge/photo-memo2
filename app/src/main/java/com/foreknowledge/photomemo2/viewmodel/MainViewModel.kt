@@ -20,6 +20,7 @@ class MainViewModel : ViewModel() {
     val memoList: LiveData<MutableList<Memo>> = _memoList
 
     fun initMemoList() = coroutineScope.launch {
-        _memoList.postValue(repository.getAllMemos().toMutableList())
+        val memos = repository.getAllMemos()
+        _memoList.postValue(memos.toMutableList())
     }
 }

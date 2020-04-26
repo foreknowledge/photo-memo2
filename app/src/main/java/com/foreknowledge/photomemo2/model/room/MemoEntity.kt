@@ -16,5 +16,5 @@ class MemoEntity (
 		@PrimaryKey(autoGenerate = true)
 		val id: Long = 0L
 ) {
-	fun toMemo() = Memo(id, title, content, photoPaths)
+	fun toMemo() = Memo(title, content, photoPaths, id)
 }

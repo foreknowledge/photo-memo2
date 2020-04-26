@@ -14,6 +14,9 @@
 	<string name="text_image_description">썸네일 이미지</string>
 	<string name="text_memo_notice">메모를 추가 해 보세요.</string>
 
+	<string name="msg_save">저장되었습니다.</string>
+	<string name="msg_delete">삭제되었습니다.</string>
+
 	<string name="btn_add_image">+ 추가</string>
 
 	<string-array name="option_add_image">

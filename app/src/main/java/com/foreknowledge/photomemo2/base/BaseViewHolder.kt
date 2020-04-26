@@ -1,5 +1,6 @@
 package com.foreknowledge.photomemo2.base
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
@@ -18,6 +19,7 @@ abstract class BaseViewHolder<B: ViewDataBinding, T: Any>(
 ): RecyclerView.ViewHolder(
 		LayoutInflater.from(parent?.context).inflate(layoutResId, parent, false)
 ) {
+	private val tag = javaClass.simpleName
 	private val binding: B = DataBindingUtil.bind(itemView)!!
 
 	fun bind(item: T) {
@@ -27,7 +29,7 @@ abstract class BaseViewHolder<B: ViewDataBinding, T: Any>(
 				executePendingBindings()
 			}
 		} catch (e: Exception) {
-
+			Log.e(tag, e.message.toString())
 		}
 	}
 }

@@ -8,8 +8,10 @@ import com.foreknowledge.photomemo2.R
 import com.foreknowledge.photomemo2.base.BaseActivity
 import com.foreknowledge.photomemo2.databinding.ActivityCreateBinding
 import com.foreknowledge.photomemo2.model.data.Memo
+import com.foreknowledge.photomemo2.util.ToastUtil
 import com.foreknowledge.photomemo2.viewmodel.MemoViewModel
 
+@Suppress("UNUSED_PARAMETER")
 class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_create) {
 	private val viewModel by lazy {
 		ViewModelProvider(this).get(MemoViewModel::class.java)
@@ -28,6 +30,7 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 
 	private fun subscribeUI() = with(viewModel) {
 		currentMemo.observe(this@CreateActivity, Observer { binding.item = it })
+		msg.observe(this@CreateActivity, Observer { ToastUtil.makeToast(it) })
 	}
 
 	fun saveMemo(view: View) {
