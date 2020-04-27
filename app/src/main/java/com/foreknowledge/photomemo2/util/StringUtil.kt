@@ -6,5 +6,9 @@ import com.foreknowledge.photomemo2.GlobalApplication
  * Create by Yeji on 26,April,2020.
  */
 object StringUtil {
-    fun getString(resId: Int) = GlobalApplication.getContext().getString(resId)
+    fun getString(resId: Int) =
+        GlobalApplication.getContext().getString(resId)
+
+    fun getStringArray(resId: Int): Array<String> =
+        GlobalApplication.getContext().resources.getStringArray(resId)
 }

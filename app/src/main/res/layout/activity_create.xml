@@ -2,9 +2,13 @@
 <layout>
 
 	<data>
+		<import type="android.view.View" />
 		<variable
 			name="item"
 			type="com.foreknowledge.photomemo2.model.data.Memo" />
+		<variable
+			name="viewModel"
+			type="com.foreknowledge.photomemo2.viewmodel.PhotoViewModel" />
 	</data>
 
 	<FrameLayout
@@ -128,7 +132,8 @@
 						<include
 							layout="@layout/url_input_box"
 							android:id="@+id/url_input_box"
-							android:visibility="gone"/>
+							android:visibility="gone"
+							app:viewModel="@{viewModel}" />
 
 						<androidx.recyclerview.widget.RecyclerView
 							android:id="@+id/preview_recycler_view"
@@ -147,14 +152,13 @@
 		</LinearLayout>
 
 		<RelativeLayout
-			android:id="@+id/loading_panel"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			android:background="#55000000"
 			android:gravity="center"
 			android:clickable="true"
 			android:focusable="true"
-			android:visibility="invisible">
+			android:visibility="@{viewModel.isLoading() ? View.VISIBLE : View.INVISIBLE}">
 
 			<ProgressBar
 				android:layout_width="wrap_content"

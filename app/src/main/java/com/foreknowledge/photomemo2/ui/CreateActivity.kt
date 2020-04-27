@@ -9,20 +9,25 @@ import android.widget.EditText
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.foreknowledge.photomemo2.EXTRA_MEMO_ID
-import com.foreknowledge.photomemo2.R
+import com.foreknowledge.photomemo2.*
 import com.foreknowledge.photomemo2.adapter.PreviewRecyclerAdapter
 import com.foreknowledge.photomemo2.base.BaseActivity
 import com.foreknowledge.photomemo2.databinding.ActivityCreateBinding
 import com.foreknowledge.photomemo2.listener.OnItemSingleClickListener
 import com.foreknowledge.photomemo2.model.data.Memo
+import com.foreknowledge.photomemo2.util.StringUtil
 import com.foreknowledge.photomemo2.util.ToastUtil
 import com.foreknowledge.photomemo2.viewmodel.MemoViewModel
+import com.foreknowledge.photomemo2.viewmodel.PhotoViewModel
 
 @Suppress("UNUSED_PARAMETER")
 class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_create) {
-	private val viewModel by lazy {
+	private val memoViewModel by lazy {
 		ViewModelProvider(this).get(MemoViewModel::class.java)
+	}
+
+	private val photoViewModel by lazy {
+		ViewModelProvider(this).get(PhotoViewModel::class.java)
 	}
 
 	private val inputMethodManager by lazy {
@@ -34,10 +39,18 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 
-		binding.lifecycleOwner = this@CreateActivity
-		binding.goBefore.setOnClickListener { finish() }
-		viewModel.getMemo(intent.getLongExtra(EXTRA_MEMO_ID, 0))
+		binding.run {
+			lifecycleOwner = this@CreateActivity
+			viewModel = photoViewModel
+			goBefore.setOnClickListener { finish() }
+		}
 
+		memoViewModel.getMemo(intent.getLongExtra(EXTRA_MEMO_ID, 0))
+
+		initView()
+	}
+
+	private fun initView() {
 		setPreviewRecyclerView()
 		subscribeUI()
 	}
@@ -57,7 +70,7 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 		}
 	}
 
-	private fun subscribeUI() = with(viewModel) {
+	private fun subscribeUI() = with(memoViewModel) {
 		currentMemo.observe(this@CreateActivity, Observer {
 			binding.item = it
 			previewRecyclerAdapter.replaceItems(it.photoPaths.split(","))
@@ -70,7 +83,7 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 	private fun hideKeyboard(view: View) =
 			inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
 
-	fun saveMemo(view: View) = with(viewModel) {
+	fun saveMemo(view: View) = with(memoViewModel) {
 		addMemo(Memo(
 				currentMemo.value?.id ?: 0L,
 				binding.editMemoTitle.text().trim(),
@@ -82,10 +95,10 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 	fun showMenu(view: View) {
 		hideKeyboard(view)
 
-		val options = resources.getStringArray(R.array.option_add_image)
+		val options = StringUtil.getStringArray(R.array.option_add_image)
 
 		AlertDialog.Builder(this)
-				.setTitle(resources.getString(R.string.text_add_image))
+				.setTitle(StringUtil.getString(R.string.text_add_image))
 				.setItems(options){ _, i ->
 					when (i) {
 						0 -> {} // 갤러리
@@ -93,5 +106,27 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 						2 -> {} // url
 					}
 				}.show()
+	}
+
+	fun hideBox(view: View) {
+		photoViewModel.clearPath()
+		hideKeyboard(view)
+	}
+
+	fun adjustUrl(view: View) {
+		with(photoViewModel) {
+			if (isFull)
+				ToastUtil.makeToast(MSG_IMAGE_FULL)
+			else if ((urlPath.value ?: "").isBlank())
+				ToastUtil.makeToast(MSG_VACANT_URL)
+//			else if (!NetworkHelper.isConnected(this))
+//				ToastUtil.makeToast(MSG_NETWORK_DISCONNECT)
+			else {
+//				urlImporter.import()
+				clearPath()
+			}
+
+			hideKeyboard(view)
+		}
 	}
 }
