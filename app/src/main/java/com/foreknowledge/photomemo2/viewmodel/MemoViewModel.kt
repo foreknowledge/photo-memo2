@@ -39,14 +39,16 @@ class MemoViewModel : ViewModel() {
 		_currentMemo.postValue(repository.getMemo(id))
 	}
 
-	fun addMemo(memo: Memo) = coroutineScope.launch {
+	fun addMemo(memo: Memo, success:() -> Unit) = coroutineScope.launch {
 		repository.addMemo(memo)
 		_msg.postValue(StringUtil.getString(R.string.msg_save))
+		success()
 	}
 
-	fun deleteMemo(id: Long) = coroutineScope.launch {
+	fun deleteMemo(id: Long, success:() -> Unit) = coroutineScope.launch {
 		repository.deleteMemo(id)
 		_msg.postValue(StringUtil.getString(R.string.msg_delete))
+		success()
 	}
 
 }

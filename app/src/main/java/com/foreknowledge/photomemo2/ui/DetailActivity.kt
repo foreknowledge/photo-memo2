@@ -39,8 +39,7 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
 	}
 
 	private fun deleteMemo() = with (viewModel) {
-		deleteMemo(currentMemo.value!!.id)
-		finish()
+		deleteMemo(currentMemo.value!!.id) { finish() }
 	}
 
 	fun showAlertDialog(view: View) {

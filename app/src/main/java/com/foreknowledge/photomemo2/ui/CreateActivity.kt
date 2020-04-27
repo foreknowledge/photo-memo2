@@ -44,25 +44,27 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 		binding.run {
 			lifecycleOwner = this@CreateActivity
 			viewModel = memoViewModel
-			goBefore.setOnClickListener { finish() }
+			goBefore.setOnClickListener { restoreAndFinish() }
+			previewRecyclerView.apply {
+				setHasFixedSize(true)
+				layoutManager = GridLayoutManager(context, 4)
+				adapter = previewRecyclerAdapter
+			}
 		}
 
 		memoViewModel.getMemo(intent.getLongExtra(EXTRA_MEMO_ID, 0))
 
-		initView()
-	}
-
-	private fun initView() {
-		setPreviewRecyclerView()
 		subscribeUI()
 	}
 
-	private fun setPreviewRecyclerView() {
-		binding.previewRecyclerView.apply {
-			setHasFixedSize(true)
-			layoutManager = GridLayoutManager(context, 4)
-			adapter = previewRecyclerAdapter
-		}
+	override fun onBackPressed() {
+		super.onBackPressed()
+		restoreAndFinish()
+	}
+
+	private fun restoreAndFinish() {
+		previewRecyclerAdapter.restoreImages()
+		finish()
 	}
 
 	private fun subscribeUI() = with(memoViewModel) {
@@ -102,7 +104,7 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 	private fun EditText.text() = text.toString()
 	private fun EditText.isBlank() = this.text.toString().trim().isBlank()
 	private fun isEmptyContents(): Boolean = with(binding) {
-		editMemoTitle.isBlank() && editMemoContent.isBlank()
+		editMemoTitle.isBlank() && editMemoContent.isBlank() && previewRecyclerAdapter.itemCount == 0
 	}
 
 	private fun hideKeyboard() =
@@ -111,13 +113,15 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 	fun saveMemo(view: View) = with(memoViewModel) {
 		if (isEmptyContents())
 			ToastUtil.showToast(StringUtil.getString(R.string.msg_vacant_content))
-		else
+		else {
 			addMemo(Memo(
 					currentMemo.value?.id ?: 0L,
 					binding.editMemoTitle.text().trim(),
-					binding.editMemoContent.text()
-			))
-		finish()
+					binding.editMemoContent.text(),
+					previewRecyclerAdapter.getImages().joinToString(",")
+			)) { finish() }
+			showLoadingBar()
+		}
 	}
 
 	fun showMenu(view: View) {
