@@ -72,8 +72,10 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 
 	private fun subscribeUI() = with(memoViewModel) {
 		currentMemo.observe(this@CreateActivity, Observer {
-			binding.item = it
-			previewRecyclerAdapter.replaceItems(it.photoPaths.split(","))
+			if (it != null) {
+				binding.item = it
+				previewRecyclerAdapter.replaceItems(it.photoPaths.split(","))
+			}
 		})
 		msg.observe(this@CreateActivity, Observer { ToastUtil.makeToast(it) })
 	}
