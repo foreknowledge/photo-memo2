@@ -24,6 +24,17 @@ class MemoViewModel : ViewModel() {
 	private val _currentMemo = MutableLiveData<Memo>()
 	val currentMemo: LiveData<Memo> = _currentMemo
 
+	private val _isLoading = MutableLiveData(false)
+	val isLoading: LiveData<Boolean> = _isLoading
+
+	private val _urlPath = MutableLiveData<String>()
+	val urlPath: LiveData<String> = _urlPath
+
+	fun showLoadingBar() { _isLoading.value = true }
+	fun hideLoadingBar() { _isLoading.value = false }
+
+	fun clearPath() { _urlPath.value = "" }
+
 	fun getMemo(id: Long) = coroutineScope.launch {
 		_currentMemo.postValue(repository.getMemo(id))
 	}

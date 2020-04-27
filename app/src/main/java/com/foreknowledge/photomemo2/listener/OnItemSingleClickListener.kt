@@ -6,12 +6,12 @@ import com.foreknowledge.photomemo2.CLICK_INTERVAL
 /**
  * Create by Yeji on 26,April,2020.
  */
-abstract class OnItemSingleClickListener(
+abstract class OnItemSingleClickListener<T>(
 		private val clickInterval: Long = CLICK_INTERVAL
-): OnItemClickListener {
+): OnItemClickListener<T> {
 	private var mLastClickTime = 0L
 
-	override fun onClick(item: Any) {
+	override fun onClick(item: T) {
 		// 중복 클릭 방지
 		if (SystemClock.elapsedRealtime() - mLastClickTime < clickInterval) return
 		mLastClickTime = SystemClock.elapsedRealtime()
@@ -19,5 +19,5 @@ abstract class OnItemSingleClickListener(
 		onSingleClick(item)
 	}
 
-	abstract fun onSingleClick(item: Any)
+	abstract fun onSingleClick(item: T)
 }

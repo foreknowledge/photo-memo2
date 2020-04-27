@@ -35,7 +35,7 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
 
 	private fun subscribeUI() = with(viewModel) {
 		currentMemo.observe(this@DetailActivity, Observer { binding.item = it })
-		msg.observe(this@DetailActivity, Observer { ToastUtil.makeToast(it) })
+		msg.observe(this@DetailActivity, Observer { ToastUtil.showToast(it) })
 	}
 
 	private fun deleteMemo() = with (viewModel) {

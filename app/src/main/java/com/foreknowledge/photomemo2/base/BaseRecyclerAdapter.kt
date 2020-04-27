@@ -8,29 +8,30 @@ import com.foreknowledge.photomemo2.listener.OnItemClickListener
 /**
  * Create by Yeji on 22,April,2020.
  */
-abstract class BaseRecyclerAdapter(
+abstract class BaseRecyclerAdapter<T>(
 		@LayoutRes private val layoutResId: Int
-) : RecyclerView.Adapter<BaseViewHolder>() {
-	private var items = listOf<Any>()
+) : RecyclerView.Adapter<BaseViewHolder<T>>() {
+	protected val items = mutableListOf<T>()
 
-	var onClickListener = object : OnItemClickListener {
-		override fun onClick(item: Any) {
+	var onClickListener = object : OnItemClickListener<T> {
+		override fun onClick(item: T) {
 			// do nothing
 		}
 	}
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-			object : BaseViewHolder(layoutResId, parent) {}
+			object : BaseViewHolder<T>(layoutResId, parent) {}
 
 	override fun getItemCount(): Int = items.size
 
-	open fun replaceItems(newItems: List<Any>?) {
+	open fun replaceItems(newItems: List<T>?) {
 		if (newItems != null) {
-			items = newItems
+			items.clear()
+			items.addAll(newItems)
 			notifyDataSetChanged()
 		}
 	}
 
-	override fun onBindViewHolder(holder: BaseViewHolder, position: Int) =
+	override fun onBindViewHolder(holder: BaseViewHolder<T>, position: Int) =
 		holder.bind(items[position], onClickListener)
 }

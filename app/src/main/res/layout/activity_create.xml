@@ -8,7 +8,7 @@
 			type="com.foreknowledge.photomemo2.model.data.Memo" />
 		<variable
 			name="viewModel"
-			type="com.foreknowledge.photomemo2.viewmodel.PhotoViewModel" />
+			type="com.foreknowledge.photomemo2.viewmodel.MemoViewModel" />
 	</data>
 
 	<FrameLayout
