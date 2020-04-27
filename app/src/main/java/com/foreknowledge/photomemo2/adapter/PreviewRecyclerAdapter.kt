@@ -4,6 +4,6 @@ import com.foreknowledge.photomemo2.R
 import com.foreknowledge.photomemo2.base.BaseRecyclerAdapter
 
 /**
- * Create by Yeji on 22,April,2020.
+ * Create by Yeji on 27,April,2020.
  */
-class MemoRecyclerAdapter: BaseRecyclerAdapter(R.layout.item_memo)
+class PreviewRecyclerAdapter: BaseRecyclerAdapter(R.layout.item_preview)

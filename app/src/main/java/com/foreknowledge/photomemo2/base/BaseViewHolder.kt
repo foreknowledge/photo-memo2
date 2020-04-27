@@ -14,16 +14,16 @@ import com.foreknowledge.photomemo2.listener.OnItemClickListener
 /**
  * Create by Yeji on 22,April,2020.
  */
-abstract class BaseViewHolder<T>(
+abstract class BaseViewHolder(
 		@LayoutRes layoutResId: Int,
 		parent: ViewGroup?
 ): RecyclerView.ViewHolder(
 		LayoutInflater.from(parent?.context).inflate(layoutResId, parent, false)
 ) {
 	private val tag = javaClass.simpleName
-	private val binding: ViewDataBinding = DataBindingUtil.bind(itemView)!!
+	val binding: ViewDataBinding = DataBindingUtil.bind(itemView)!!
 
-	fun bind(item: Any, listener: OnItemClickListener<T>) {
+	fun bind(item: Any, listener: OnItemClickListener) {
 		try {
 			binding.run {
 				setVariable(BR.item, item)

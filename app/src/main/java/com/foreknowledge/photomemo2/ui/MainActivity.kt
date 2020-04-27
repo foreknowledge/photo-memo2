@@ -43,11 +43,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 		viewModel.initMemoList()
 	}
 
-	private fun setItemClickListener() = object: OnItemSingleClickListener<Memo>() {
-		override fun onSingleClick(item: Memo) {
+	private fun setItemClickListener() = object: OnItemSingleClickListener() {
+		override fun onSingleClick(item: Any) {
 			startActivity(
 					Intent(this@MainActivity, DetailActivity::class.java)
-							.apply { putExtra(EXTRA_MEMO_ID, item.id) }
+							.apply { putExtra(EXTRA_MEMO_ID, (item as Memo).id) }
 			)
 		}
 	}

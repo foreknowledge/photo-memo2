@@ -8,23 +8,21 @@ import com.foreknowledge.photomemo2.listener.OnItemClickListener
 /**
  * Create by Yeji on 22,April,2020.
  */
-abstract class BaseRecyclerAdapter<T>(
+abstract class BaseRecyclerAdapter(
 		@LayoutRes private val layoutResId: Int
-) : RecyclerView.Adapter<BaseViewHolder<T>>() {
-	protected var items = listOf<Any>()
+) : RecyclerView.Adapter<BaseViewHolder>() {
+	private var items = listOf<Any>()
 
-	var onClickListener = object : OnItemClickListener<T> {
-		override fun onClick(item: T) {
+	var onClickListener = object : OnItemClickListener {
+		override fun onClick(item: Any) {
 			// do nothing
 		}
 	}
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-			object : BaseViewHolder<T>(layoutResId, parent) {}
+			object : BaseViewHolder(layoutResId, parent) {}
 
 	override fun getItemCount(): Int = items.size
-
-	fun getItem(position: Int) = items[position]
 
 	open fun replaceItems(newItems: List<Any>?) {
 		if (newItems != null) {
@@ -33,6 +31,6 @@ abstract class BaseRecyclerAdapter<T>(
 		}
 	}
 
-	override fun onBindViewHolder(holder: BaseViewHolder<T>, position: Int) =
+	override fun onBindViewHolder(holder: BaseViewHolder, position: Int) =
 		holder.bind(items[position], onClickListener)
 }
