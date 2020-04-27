@@ -2,7 +2,6 @@
 	<string name="app_name">포토 메모장</string>
 
 	<string name="text_save">저장</string>
-	<string name="text_cancel">취소</string>
 	<string name="text_adjust">적용</string>
 	<string name="text_hide">숨기기</string>
 	<string name="text_memo_title">제목</string>
@@ -16,6 +15,15 @@
 
 	<string name="msg_save">저장되었습니다.</string>
 	<string name="msg_delete">삭제되었습니다.</string>
+	<string name="msg_permission_granted">권한 승인됨</string>
+	<string name="msg_permission_denied">권한 거부됨</string>
+
+	<string name="msg_vacant_url">Url 주소를 입력해 주세요.</string>
+	<string name="msg_vacant_content">입력한 내용이 없어 메모를 저장하지 않았어요.</string>
+
+	<string name="err_permission_denied">권한을 승인하셔야 합니다.</string>
+	<string name="err_url_import">이미지를 가져오는데 실패했습니다.</string>
+	<string name="err_network_disconnect">네트워크 연결 상태를 확인 해 주세요.</string>
 
 	<string name="btn_add_image">+ 추가</string>
 
