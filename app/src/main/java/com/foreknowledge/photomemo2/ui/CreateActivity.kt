@@ -1,7 +1,9 @@
 package com.foreknowledge.photomemo2.ui
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -10,27 +12,24 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.foreknowledge.photomemo2.*
+import com.foreknowledge.photomemo2.RequestCode.CHOOSE_CAMERA_IMAGE
+import com.foreknowledge.photomemo2.RequestCode.CHOOSE_GALLERY_IMAGE
 import com.foreknowledge.photomemo2.adapter.PreviewRecyclerAdapter
 import com.foreknowledge.photomemo2.base.BaseActivity
 import com.foreknowledge.photomemo2.databinding.ActivityCreateBinding
-import com.foreknowledge.photomemo2.listener.OnItemSingleClickListener
 import com.foreknowledge.photomemo2.model.data.Memo
+import com.foreknowledge.photomemo2.util.BitmapUtil
 import com.foreknowledge.photomemo2.util.importer.CameraImporter
 import com.foreknowledge.photomemo2.util.importer.GalleryImporter
 import com.foreknowledge.photomemo2.util.importer.UrlImporter
 import com.foreknowledge.photomemo2.util.StringUtil
 import com.foreknowledge.photomemo2.util.ToastUtil
 import com.foreknowledge.photomemo2.viewmodel.MemoViewModel
-import com.foreknowledge.photomemo2.viewmodel.PhotoViewModel
 
 @Suppress("UNUSED_PARAMETER")
 class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_create) {
 	private val memoViewModel by lazy {
 		ViewModelProvider(this)[MemoViewModel::class.java]
-	}
-
-	private val photoViewModel by lazy {
-		ViewModelProvider(this)[PhotoViewModel::class.java]
 	}
 
 	private val inputMethodManager by lazy {
@@ -44,7 +43,7 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 
 		binding.run {
 			lifecycleOwner = this@CreateActivity
-			viewModel = photoViewModel
+			viewModel = memoViewModel
 			goBefore.setOnClickListener { finish() }
 		}
 
@@ -62,29 +61,39 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 		binding.previewRecyclerView.apply {
 			setHasFixedSize(true)
 			layoutManager = GridLayoutManager(context, 4)
-			adapter = previewRecyclerAdapter.apply {
-				onClickListener = setItemClickListener()
+			adapter = previewRecyclerAdapter
+		}
+	}
+
+	private fun subscribeUI() = with(memoViewModel) {
+		currentMemo.observe(this@CreateActivity, Observer {
+			binding.item = it
+			it?.photoPaths?.run {
+				if (isNotBlank())
+					previewRecyclerAdapter.replaceItems(split(","))
 			}
-		}
+		})
+		msg.observe(this@CreateActivity, Observer { ToastUtil.showToast(it) })
 	}
 
-	private fun setItemClickListener() = object: OnItemSingleClickListener() {
-		override fun onSingleClick(item: Any) {
-			// TODO: delete preview
-		}
-	}
+	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+		super.onActivityResult(requestCode, resultCode, data)
 
-	private fun subscribeUI() {
-		with(memoViewModel) {
-			currentMemo.observe(this@CreateActivity, Observer {
-				binding.item = it
-				photoViewModel.setPhotoPaths(it?.photoPaths)
-			})
-			msg.observe(this@CreateActivity, Observer { ToastUtil.makeToast(it) })
+		with(binding.urlInputBox.root){
+			if (visibility == View.VISIBLE) visibility = View.GONE
 		}
 
-		with(photoViewModel) {
-			photoPaths.observe(this@CreateActivity, Observer { previewRecyclerAdapter.replaceItems(it) })
+		if (resultCode == Activity.RESULT_OK) {
+			val resultPath =
+					if (requestCode == CHOOSE_GALLERY_IMAGE && data != null && data.data != null)
+						GalleryImporter.getImageFilePath(this, data.data!!)
+					else if (requestCode == CHOOSE_CAMERA_IMAGE)
+						CameraImporter.getFilePath()
+					else null
+
+			resultPath?.let{
+				previewRecyclerAdapter.addPath(BitmapUtil.rotateAndCompressImage(it))
+			}
 		}
 	}
 
@@ -101,7 +110,7 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 
 	fun saveMemo(view: View) = with(memoViewModel) {
 		if (isEmptyContents())
-			ToastUtil.makeToast(MSG_VACANT_CONTENT)
+			ToastUtil.showToast(StringUtil.getString(R.string.msg_vacant_content))
 		else
 			addMemo(Memo(
 					currentMemo.value?.id ?: 0L,
@@ -114,10 +123,12 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 	fun showMenu(view: View) {
 		hideKeyboard()
 
-		if (photoViewModel.isFull) {
-			ToastUtil.makeToast(MSG_IMAGE_FULL)
+		if (previewRecyclerAdapter.isFull()) {
+			ToastUtil.showToast(MSG_IMAGE_FULL)
 			return
 		}
+
+		// TODO: 권한 체크
 
 		val options = StringUtil.getStringArray(R.array.option_add_image)
 
@@ -134,22 +145,32 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 
 	fun hideBox(view: View) {
 		UrlImporter.fadeOut(binding.urlInputBox.root)
-		photoViewModel.clearPath()
+		memoViewModel.clearPath()
 		hideKeyboard()
 	}
 
-	fun adjustUrl(view: View) = with(photoViewModel) {
-		val url = binding.urlInputBox.etUrl.text()
-		if (isFull)
-			ToastUtil.makeToast(MSG_IMAGE_FULL)
-		else if (url.isBlank())
-			ToastUtil.makeToast(MSG_VACANT_URL)
-		else {
-			// TODO: add preview
-			showLoadingBar()
-			clearPath()
-		}
+	fun adjustUrl(view: View) {
+		with(memoViewModel) {
+			val url = binding.urlInputBox.etUrl.text()
+			if (url.isBlank())
+				ToastUtil.showToast(StringUtil.getString(R.string.msg_vacant_url))
+			else {
+				UrlImporter.convertBitmap(
+						this@CreateActivity, url,
+						success = { bitmap ->
+							previewRecyclerAdapter.addPath(BitmapUtil.bitmapToImageFile(this@CreateActivity, bitmap!!))
+							hideLoadingBar()
+						},
+						failed = {
+							ToastUtil.showToast(StringUtil.getString(R.string.err_url_import))
+							hideLoadingBar()
+						}
+				)
+				showLoadingBar()
+				clearPath()
+			}
 
-		hideKeyboard()
+			hideKeyboard()
+		}
 	}
 }

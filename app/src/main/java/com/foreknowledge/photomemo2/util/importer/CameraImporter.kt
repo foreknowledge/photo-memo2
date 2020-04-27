@@ -15,8 +15,6 @@ object CameraImporter {
 	private lateinit var file: File
 
 	fun switchToCamera(activity: Activity) {
-		// TODO: 권한 체크
-
 		file = FileUtil.createJpgFile(activity)
 		val uri = FileProvider.getUriForFile(activity, "${activity.packageName}.fileprovider", file)
 
