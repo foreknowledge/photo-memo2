@@ -36,7 +36,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main),
 		binding.memoRecyclerView.apply {
 			layoutManager = LinearLayoutManager(this@MainActivity)
 			adapter = memoRecyclerAdapter.apply {
-				onClickListener = setItemClickListener()
+				onClickListener = getItemClickListener()
 			}
 		}
 
@@ -51,7 +51,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main),
 		viewModel.initMemoList()
 	}
 
-	private fun setItemClickListener() = object: OnItemSingleClickListener<Memo>() {
+	private fun getItemClickListener() = object: OnItemSingleClickListener<Memo>() {
 		override fun onSingleClick(item: Memo) {
 			startActivity(
 					Intent(this@MainActivity, DetailActivity::class.java)

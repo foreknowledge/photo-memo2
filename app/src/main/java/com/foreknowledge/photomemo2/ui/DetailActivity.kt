@@ -6,10 +6,13 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.foreknowledge.photomemo2.EXTRA_MEMO_ID
 import com.foreknowledge.photomemo2.R
+import com.foreknowledge.photomemo2.adapter.PhotoRecyclerAdapter
 import com.foreknowledge.photomemo2.base.BaseActivity
 import com.foreknowledge.photomemo2.databinding.ActivityDetailBinding
+import com.foreknowledge.photomemo2.listener.OnItemSingleClickListener
 import com.foreknowledge.photomemo2.util.ToastUtil
 import com.foreknowledge.photomemo2.viewmodel.MemoViewModel
 
@@ -19,11 +22,19 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
 		ViewModelProvider(this).get(MemoViewModel::class.java)
 	}
 
+	private val photoRecyclerAdapter = PhotoRecyclerAdapter()
+
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 
 		binding.lifecycleOwner = this
 		binding.goBefore.setOnClickListener { finish() }
+		binding.photoRecyclerView.apply {
+			layoutManager = LinearLayoutManager(this@DetailActivity)
+			adapter = photoRecyclerAdapter.apply {
+				onClickListener = getItemClickListener()
+			}
+		}
 
 		subscribeUI()
 	}
@@ -33,8 +44,20 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
 		viewModel.getMemo(intent.getLongExtra(EXTRA_MEMO_ID, 0))
 	}
 
+	private fun getItemClickListener() = object: OnItemSingleClickListener<String>() {
+		override fun onSingleClick(item: String) {
+			ToastUtil.showToast("click item: $item")
+		}
+	}
+
 	private fun subscribeUI() = with(viewModel) {
-		currentMemo.observe(this@DetailActivity, Observer { binding.item = it })
+		currentMemo.observe(this@DetailActivity, Observer {
+			binding.item = it
+			it?.photoPaths?.run {
+				if (isNotBlank())
+					photoRecyclerAdapter.replaceItems(split(","))
+			}
+		})
 		msg.observe(this@DetailActivity, Observer { ToastUtil.showToast(it) })
 	}
 
