@@ -8,6 +8,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.foreknowledge.photomemo2.EXTRA_MEMO_ID
+import com.foreknowledge.photomemo2.EXTRA_PHOTOS
+import com.foreknowledge.photomemo2.EXTRA_PHOTO_POSITION
 import com.foreknowledge.photomemo2.R
 import com.foreknowledge.photomemo2.adapter.PhotoRecyclerAdapter
 import com.foreknowledge.photomemo2.base.BaseActivity
@@ -46,7 +48,13 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
 
 	private fun getItemClickListener() = object: OnItemSingleClickListener<String>() {
 		override fun onSingleClick(item: String) {
-			ToastUtil.showToast("click item: $item")
+			startActivity(
+				Intent(this@DetailActivity, PhotoActivity::class.java)
+					.apply {
+						putExtra(EXTRA_PHOTOS, viewModel.currentMemo.value?.photoPaths)
+						putExtra(EXTRA_PHOTO_POSITION, photoRecyclerAdapter.getItemPosition(item))
+					}
+			)
 		}
 	}
 
