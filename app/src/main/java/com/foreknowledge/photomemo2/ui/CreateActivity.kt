@@ -19,6 +19,7 @@ import com.foreknowledge.photomemo2.base.BaseActivity
 import com.foreknowledge.photomemo2.databinding.ActivityCreateBinding
 import com.foreknowledge.photomemo2.model.data.Memo
 import com.foreknowledge.photomemo2.util.BitmapUtil
+import com.foreknowledge.photomemo2.util.PermissionUtil
 import com.foreknowledge.photomemo2.util.importer.CameraImporter
 import com.foreknowledge.photomemo2.util.importer.GalleryImporter
 import com.foreknowledge.photomemo2.util.importer.UrlImporter
@@ -132,7 +133,11 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 			return
 		}
 
-		// TODO: 권한 체크
+		// 권한 체크
+		if (PermissionUtil.isPermissionDenied(this)) {
+			ToastUtil.showToast(StringUtil.getString(R.string.err_permission_denied))
+			return
+		}
 
 		val options = StringUtil.getStringArray(R.array.option_add_image)
 
