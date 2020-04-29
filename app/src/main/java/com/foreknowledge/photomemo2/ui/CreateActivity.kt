@@ -11,12 +11,15 @@ import android.widget.EditText
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.foreknowledge.photomemo2.*
 import com.foreknowledge.photomemo2.RequestCode.CHOOSE_CAMERA_IMAGE
 import com.foreknowledge.photomemo2.RequestCode.CHOOSE_GALLERY_IMAGE
 import com.foreknowledge.photomemo2.adapter.PreviewRecyclerAdapter
 import com.foreknowledge.photomemo2.base.BaseActivity
 import com.foreknowledge.photomemo2.databinding.ActivityCreateBinding
+import com.foreknowledge.photomemo2.listener.OnItemDragListener
 import com.foreknowledge.photomemo2.model.data.Memo
 import com.foreknowledge.photomemo2.util.BitmapUtil
 import com.foreknowledge.photomemo2.util.PermissionUtil
@@ -37,6 +40,12 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 		getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 	}
 
+	private val itemTouchHelper: ItemTouchHelper by lazy {
+		ItemTouchHelper(PreviewItemTouchCallback(previewRecyclerAdapter)).apply {
+			attachToRecyclerView(binding.previewRecyclerView)
+		}
+	}
+
 	private val previewRecyclerAdapter = PreviewRecyclerAdapter()
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,7 +58,9 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 			previewRecyclerView.apply {
 				setHasFixedSize(true)
 				layoutManager = GridLayoutManager(context, 4)
-				adapter = previewRecyclerAdapter
+				adapter = previewRecyclerAdapter.apply {
+					onItemDragListener = getItemDragListener()
+				}
 			}
 		}
 
@@ -66,6 +77,12 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 	private fun restoreAndFinish() {
 		previewRecyclerAdapter.restoreImages()
 		finish()
+	}
+
+	private fun getItemDragListener() = object: OnItemDragListener {
+		override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
+			itemTouchHelper.startDrag(viewHolder)
+		}
 	}
 
 	private fun subscribeUI() = with(memoViewModel) {

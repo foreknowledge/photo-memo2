@@ -1,15 +1,21 @@
 package com.foreknowledge.photomemo2.adapter
 
+import android.view.MotionEvent
+import androidx.recyclerview.widget.RecyclerView
 import com.foreknowledge.photomemo2.R
 import com.foreknowledge.photomemo2.base.BaseRecyclerAdapter
 import com.foreknowledge.photomemo2.base.BaseViewHolder
+import com.foreknowledge.photomemo2.databinding.ItemPreviewBinding
 import com.foreknowledge.photomemo2.listener.OnItemClickListener
+import com.foreknowledge.photomemo2.listener.OnItemDragListener
+import com.foreknowledge.photomemo2.listener.OnItemMoveListener
 import com.foreknowledge.photomemo2.util.FileUtil
 
 /**
  * Create by Yeji on 27,April,2020.
  */
-class PreviewRecyclerAdapter: BaseRecyclerAdapter<String>(R.layout.item_preview) {
+class PreviewRecyclerAdapter
+	: BaseRecyclerAdapter<String>(R.layout.item_preview), OnItemMoveListener {
 	companion object {
 		const val MAX_IMAGE_COUNT = 10
 
@@ -21,6 +27,12 @@ class PreviewRecyclerAdapter: BaseRecyclerAdapter<String>(R.layout.item_preview)
 
 	private val originalImgPaths: List<String> = items
 	private val history = mutableListOf<PhotoHistory>()
+
+	var onItemDragListener = object: OnItemDragListener {
+		override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
+			// do nothing
+		}
+	}
 
 	fun getImages(): List<String> {
 		for (action in history)
@@ -56,5 +68,20 @@ class PreviewRecyclerAdapter: BaseRecyclerAdapter<String>(R.layout.item_preview)
 				notifyDataSetChanged()
 			}
 		})
+
+		(holder.binding as ItemPreviewBinding).imagePreview.setOnTouchListener { _, event ->
+			if (event.actionMasked == MotionEvent.ACTION_DOWN)
+				onItemDragListener.onStartDrag(holder)
+
+			false
+		}
+	}
+
+	override fun onItemMove(fromPosition: Int, toPosition: Int) {
+		val target = items[fromPosition]
+		items.removeAt(fromPosition)
+		items.add(toPosition, target)
+
+		notifyItemMoved(fromPosition, toPosition)
 	}
 }
