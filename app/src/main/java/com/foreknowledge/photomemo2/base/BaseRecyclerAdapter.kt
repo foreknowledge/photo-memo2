@@ -13,9 +13,18 @@ abstract class BaseRecyclerAdapter<T>(
 ) : RecyclerView.Adapter<BaseViewHolder<T>>() {
 	protected val items = mutableListOf<T>()
 
-	var onClickListener = object : OnItemClickListener<T> {
-		override fun onClick(item: T) {
-			// do nothing
+	private var onItemClickListener: OnItemClickListener<T> =
+			object : OnItemClickListener<T> {
+				override fun onClick(item: T) {
+					// do nothing
+				}
+			}
+
+	open fun setOnItemClickListener(listener:(item: T) -> Unit) {
+		this.onItemClickListener = object : OnItemClickListener<T> {
+			override fun onClick(item: T) {
+				listener(item)
+			}
 		}
 	}
 
@@ -33,5 +42,5 @@ abstract class BaseRecyclerAdapter<T>(
 	}
 
 	override fun onBindViewHolder(holder: BaseViewHolder<T>, position: Int) =
-		holder.bind(items[position], onClickListener)
+		holder.bind(items[position], onItemClickListener)
 }

@@ -13,8 +13,6 @@ import com.foreknowledge.photomemo2.RequestCode.PERMISSION_REQUEST_CODE
 import com.foreknowledge.photomemo2.adapter.MemoRecyclerAdapter
 import com.foreknowledge.photomemo2.base.BaseActivity
 import com.foreknowledge.photomemo2.databinding.ActivityMainBinding
-import com.foreknowledge.photomemo2.listener.OnItemSingleClickListener
-import com.foreknowledge.photomemo2.model.data.Memo
 import com.foreknowledge.photomemo2.util.StringUtil
 import com.foreknowledge.photomemo2.viewmodel.MainViewModel
 import com.pedro.library.AutoPermissions
@@ -36,7 +34,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main),
 		binding.memoRecyclerView.apply {
 			layoutManager = LinearLayoutManager(this@MainActivity)
 			adapter = memoRecyclerAdapter.apply {
-				onClickListener = getItemClickListener()
+				setOnItemClickListener {
+					startActivity(
+							Intent(this@MainActivity, DetailActivity::class.java)
+									.apply { putExtra(EXTRA_MEMO_ID, it.id) }
+					)
+				}
 			}
 		}
 
@@ -49,15 +52,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main),
 		super.onResume()
 
 		viewModel.initMemoList()
-	}
-
-	private fun getItemClickListener() = object: OnItemSingleClickListener<Memo>() {
-		override fun onSingleClick(item: Memo) {
-			startActivity(
-					Intent(this@MainActivity, DetailActivity::class.java)
-							.apply { putExtra(EXTRA_MEMO_ID, item.id) }
-			)
-		}
 	}
 
 	private fun subscribeUI() {

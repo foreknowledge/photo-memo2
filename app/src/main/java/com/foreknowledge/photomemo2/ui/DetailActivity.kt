@@ -34,7 +34,15 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
 		binding.photoRecyclerView.apply {
 			layoutManager = LinearLayoutManager(this@DetailActivity)
 			adapter = photoRecyclerAdapter.apply {
-				onClickListener = getItemClickListener()
+				setOnItemClickListener {
+					startActivity(
+							Intent(this@DetailActivity, PhotoActivity::class.java)
+									.apply {
+										putExtra(EXTRA_PHOTOS, viewModel.currentMemo.value?.photoPaths)
+										putExtra(EXTRA_PHOTO_POSITION, photoRecyclerAdapter.getItemPosition(it))
+									}
+					)
+				}
 			}
 		}
 
@@ -44,18 +52,6 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
 	override fun onResume() {
 		super.onResume()
 		viewModel.getMemo(intent.getLongExtra(EXTRA_MEMO_ID, 0))
-	}
-
-	private fun getItemClickListener() = object: OnItemSingleClickListener<String>() {
-		override fun onSingleClick(item: String) {
-			startActivity(
-				Intent(this@DetailActivity, PhotoActivity::class.java)
-					.apply {
-						putExtra(EXTRA_PHOTOS, viewModel.currentMemo.value?.photoPaths)
-						putExtra(EXTRA_PHOTO_POSITION, photoRecyclerAdapter.getItemPosition(item))
-					}
-			)
-		}
 	}
 
 	private fun subscribeUI() = with(viewModel) {

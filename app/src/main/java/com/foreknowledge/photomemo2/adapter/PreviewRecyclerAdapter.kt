@@ -28,9 +28,18 @@ class PreviewRecyclerAdapter
 	private val originalImgPaths: List<String> = items
 	private val history = mutableListOf<PhotoHistory>()
 
-	var onItemDragListener = object: OnItemDragListener {
-		override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
-			// do nothing
+	private var onItemDragListener: OnItemDragListener =
+			object: OnItemDragListener {
+				override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
+					// do nothing
+				}
+			}
+
+	fun setOnItemDragListener(listener: (viewHolder: RecyclerView.ViewHolder) -> Unit) {
+		this.onItemDragListener = object: OnItemDragListener {
+			override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
+				listener(viewHolder)
+			}
 		}
 	}
 
