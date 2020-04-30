@@ -19,13 +19,10 @@ import com.foreknowledge.photomemo2.adapter.PreviewRecyclerAdapter
 import com.foreknowledge.photomemo2.base.BaseActivity
 import com.foreknowledge.photomemo2.databinding.ActivityCreateBinding
 import com.foreknowledge.photomemo2.model.data.Memo
-import com.foreknowledge.photomemo2.util.BitmapUtil
-import com.foreknowledge.photomemo2.util.PermissionUtil
+import com.foreknowledge.photomemo2.util.*
 import com.foreknowledge.photomemo2.util.importer.CameraImporter
 import com.foreknowledge.photomemo2.util.importer.GalleryImporter
 import com.foreknowledge.photomemo2.util.importer.UrlImporter
-import com.foreknowledge.photomemo2.util.StringUtil
-import com.foreknowledge.photomemo2.util.ToastUtil
 import com.foreknowledge.photomemo2.viewmodel.MemoViewModel
 
 @Suppress("UNUSED_PARAMETER")
@@ -91,7 +88,7 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 		super.onActivityResult(requestCode, resultCode, data)
 
-		with(binding.urlInputBox.root){
+		with(binding.urlInputBox.root) {
 			if (visibility == View.VISIBLE) visibility = View.GONE
 		}
 
@@ -103,7 +100,7 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 						CameraImporter.getFilePath()
 					else null
 
-			resultPath?.let{
+			resultPath?.let {
 				previewRecyclerAdapter.addPath(BitmapUtil.rotateAndCompressImage(it))
 			}
 		}
@@ -168,16 +165,19 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 	}
 
 	fun adjustUrl(view: View) {
-		with(memoViewModel) {
-			val url = binding.urlInputBox.etUrl.text()
-			if (url.isBlank())
+		val url = binding.urlInputBox.etUrl.text()
+		when {
+			url.isBlank() ->
 				ToastUtil.showToast(StringUtil.getString(R.string.msg_vacant_url))
-			else {
+			!NetworkUtil.isConnected(this) ->
+				ToastUtil.showToast(StringUtil.getString(R.string.err_network_disconnect))
+			else -> with(memoViewModel) {
 				UrlImporter.convertBitmap(
 						this@CreateActivity, url,
 						success = { bitmap ->
 							previewRecyclerAdapter.addPath(BitmapUtil.bitmapToImageFile(this@CreateActivity, bitmap!!))
 							hideLoadingBar()
+							clearPath()
 						},
 						failed = {
 							ToastUtil.showToast(StringUtil.getString(R.string.err_url_import))
@@ -185,10 +185,9 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 						}
 				)
 				showLoadingBar()
-				clearPath()
 			}
-
-			hideKeyboard()
 		}
+
+		hideKeyboard()
 	}
 }
