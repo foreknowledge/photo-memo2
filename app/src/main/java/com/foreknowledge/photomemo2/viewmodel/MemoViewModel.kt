@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.foreknowledge.photomemo2.R
 import com.foreknowledge.photomemo2.model.data.Memo
 import com.foreknowledge.photomemo2.model.repository.MemoRepository
+import com.foreknowledge.photomemo2.util.FileUtil
 import com.foreknowledge.photomemo2.util.StringUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -45,8 +46,10 @@ class MemoViewModel : ViewModel() {
 		success()
 	}
 
-	fun deleteMemo(id: Long, success:() -> Unit) = coroutineScope.launch {
-		repository.deleteMemo(id)
+	fun deleteMemo(memo: Memo, success:() -> Unit) = coroutineScope.launch {
+		repository.deleteMemo(memo.id)
+		if (memo.photoPaths.isNotBlank())
+			FileUtil.deleteFiles(memo.photoPaths.split(","))
 		_msg.postValue(StringUtil.getString(R.string.msg_delete))
 		success()
 	}

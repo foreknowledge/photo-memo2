@@ -14,7 +14,6 @@ import com.foreknowledge.photomemo2.R
 import com.foreknowledge.photomemo2.adapter.PhotoRecyclerAdapter
 import com.foreknowledge.photomemo2.base.BaseActivity
 import com.foreknowledge.photomemo2.databinding.ActivityDetailBinding
-import com.foreknowledge.photomemo2.listener.OnItemSingleClickListener
 import com.foreknowledge.photomemo2.util.ToastUtil
 import com.foreknowledge.photomemo2.viewmodel.MemoViewModel
 
@@ -65,8 +64,8 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
 		msg.observe(this@DetailActivity, Observer { ToastUtil.showToast(it) })
 	}
 
-	private fun deleteMemo() = with (viewModel) {
-		deleteMemo(currentMemo.value!!.id) { finish() }
+	private fun deleteMemo() = viewModel.currentMemo.value?.let { memo ->
+		viewModel.deleteMemo(memo) { finish() }
 	}
 
 	fun showAlertDialog(view: View) {
