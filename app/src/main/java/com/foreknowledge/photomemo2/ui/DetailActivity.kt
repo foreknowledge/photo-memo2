@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.foreknowledge.photomemo2.EXTRA_MEMO_ID
 import com.foreknowledge.photomemo2.EXTRA_PHOTOS
 import com.foreknowledge.photomemo2.EXTRA_PHOTO_POSITION
@@ -31,7 +31,7 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
 		binding.lifecycleOwner = this
 		binding.goBefore.setOnClickListener { finish() }
 		binding.photoRecyclerView.apply {
-			layoutManager = LinearLayoutManager(this@DetailActivity)
+			layoutManager = GridLayoutManager(context, 2)
 			adapter = photoRecyclerAdapter.apply {
 				setOnItemClickListener {
 					startActivity(

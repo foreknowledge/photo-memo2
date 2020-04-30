@@ -3,9 +3,9 @@
 
 	<item android:drawable="@color/colorPrimary"/>
 
-	<item>
+	<item android:bottom="100dp">
 		<bitmap android:src="@drawable/ic_foreground"
-			android:gravity="center"/>
+			android:gravity="center" />
 	</item>
 
 </layer-list>

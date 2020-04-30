@@ -32,7 +32,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main),
 
 		binding.lifecycleOwner = this@MainActivity
 		binding.memoRecyclerView.apply {
-			layoutManager = LinearLayoutManager(this@MainActivity)
+			layoutManager = LinearLayoutManager(this@MainActivity).apply {
+				reverseLayout = true
+				stackFromEnd = true
+			}
 			adapter = memoRecyclerAdapter.apply {
 				setOnItemClickListener {
 					startActivity(
