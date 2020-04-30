@@ -35,16 +35,15 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 		getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 	}
 
-	private val itemTouchHelper: ItemTouchHelper by lazy {
-		ItemTouchHelper(PreviewItemTouchCallback(previewRecyclerAdapter)).apply {
-			attachToRecyclerView(binding.previewRecyclerView)
-		}
-	}
-
+	private lateinit var itemTouchHelper: ItemTouchHelper
 	private val previewRecyclerAdapter = PreviewRecyclerAdapter()
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
+
+		itemTouchHelper = ItemTouchHelper(PreviewItemTouchCallback(previewRecyclerAdapter)).apply {
+			attachToRecyclerView(binding.previewRecyclerView)
+		}
 
 		binding.run {
 			lifecycleOwner = this@CreateActivity

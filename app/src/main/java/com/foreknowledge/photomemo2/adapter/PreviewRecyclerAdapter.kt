@@ -1,5 +1,6 @@
 package com.foreknowledge.photomemo2.adapter
 
+import android.annotation.SuppressLint
 import android.view.MotionEvent
 import androidx.recyclerview.widget.RecyclerView
 import com.foreknowledge.photomemo2.R
@@ -31,7 +32,7 @@ class PreviewRecyclerAdapter
 	private var onItemDragListener: OnItemDragListener =
 			object: OnItemDragListener {
 				override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
-					// do nothing
+					// default drag listener: do nothing
 				}
 			}
 
@@ -69,6 +70,7 @@ class PreviewRecyclerAdapter
 
 	fun isFull() = itemCount == MAX_IMAGE_COUNT
 
+	@SuppressLint("ClickableViewAccessibility")
 	override fun onBindViewHolder(holder: BaseViewHolder<String>, position: Int) {
 		holder.bind(items[position], object: OnItemClickListener<String>{
 			override fun onClick(item: String) {

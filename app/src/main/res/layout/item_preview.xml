@@ -31,8 +31,6 @@
                   android:background="@color/colorGray2"
                   android:contentDescription="@string/text_image_preview"
                   android:scaleType="centerCrop"
-                  android:clickable="false"
-                  android:focusable="false"
                   app:bind_imagePath="@{item}"
                   app:layout_constraintDimensionRatio="1:1"
                   app:layout_constraintBottom_toBottomOf="parent"

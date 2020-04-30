@@ -16,7 +16,7 @@ abstract class BaseRecyclerAdapter<T>(
 	private var onItemClickListener: OnItemClickListener<T> =
 			object : OnItemClickListener<T> {
 				override fun onClick(item: T) {
-					// do nothing
+					// default click listener: do nothing
 				}
 			}
 
