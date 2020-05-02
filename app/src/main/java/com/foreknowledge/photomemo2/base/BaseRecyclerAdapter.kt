@@ -4,6 +4,7 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 import com.foreknowledge.photomemo2.listener.OnItemClickListener
+import com.foreknowledge.photomemo2.listener.OnItemSingleClickListener
 
 /**
  * Create by Yeji on 22,April,2020.
@@ -21,8 +22,8 @@ abstract class BaseRecyclerAdapter<T>(
 			}
 
 	open fun setOnItemClickListener(listener:(item: T) -> Unit) {
-		this.onItemClickListener = object : OnItemClickListener<T> {
-			override fun onClick(item: T) {
+		this.onItemClickListener = object : OnItemSingleClickListener<T>() {
+			override fun onSingleClick(item: T) {
 				listener(item)
 			}
 		}

@@ -3,6 +3,7 @@ package com.foreknowledge.photomemo2.adapter
 import android.annotation.SuppressLint
 import android.view.MotionEvent
 import androidx.recyclerview.widget.RecyclerView
+import com.foreknowledge.photomemo2.MAX_IMAGE_COUNT
 import com.foreknowledge.photomemo2.R
 import com.foreknowledge.photomemo2.base.BaseRecyclerAdapter
 import com.foreknowledge.photomemo2.base.BaseViewHolder
@@ -18,8 +19,6 @@ import com.foreknowledge.photomemo2.util.FileUtil
 class PreviewRecyclerAdapter
 	: BaseRecyclerAdapter<String>(R.layout.item_preview), OnItemMoveListener {
 	companion object {
-		const val MAX_IMAGE_COUNT = 10
-
 		const val ADD_IMAGE = 1
 		const val DELETE_IMAGE = -1
 	}
