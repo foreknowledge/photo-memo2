@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -14,7 +15,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.foreknowledge.photomemo2.*
 import com.foreknowledge.photomemo2.RequestCode.CHOOSE_CAMERA_IMAGE
-import com.foreknowledge.photomemo2.RequestCode.CHOOSE_GALLERY_IMAGE
 import com.foreknowledge.photomemo2.adapter.PreviewRecyclerAdapter
 import com.foreknowledge.photomemo2.base.BaseActivity
 import com.foreknowledge.photomemo2.databinding.ActivityCreateBinding
@@ -91,18 +91,23 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 			if (visibility == View.VISIBLE) visibility = View.GONE
 		}
 
-		if (resultCode == Activity.RESULT_OK) {
-			val resultPath =
-					if (requestCode == CHOOSE_GALLERY_IMAGE && data != null && data.data != null)
-						GalleryImporter.getImageFilePath(this, data.data!!)
-					else if (requestCode == CHOOSE_CAMERA_IMAGE)
-						CameraImporter.getFilePath()
-					else null
-
-			resultPath?.let {
-				previewRecyclerAdapter.addPath(BitmapUtil.rotateAndCompressImage(it))
+		if (resultCode == Activity.RESULT_OK && requestCode == CHOOSE_CAMERA_IMAGE) {
+			CameraImporter.getFilePath().let {
+				if (it.isNotBlank())
+					previewRecyclerAdapter.addPath(BitmapUtil.rotateAndCompressImage(it))
 			}
 		}
+	}
+
+	private fun showMultiImage(list: List<Uri>) {
+		val selectedImagePaths = mutableListOf<String>()
+		list.forEach { uri ->
+			GalleryImporter.getFilePath(this, uri).let {
+				if (it.isNotBlank())
+					selectedImagePaths.add(BitmapUtil.rotateAndCompressImage(it))
+			}
+		}
+		previewRecyclerAdapter.addPaths(selectedImagePaths)
 	}
 
 	/* ######################### button click listener ######################### */
@@ -150,7 +155,10 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 				.setTitle(StringUtil.getString(R.string.text_add_image))
 				.setItems(options) { _, index ->
 					when (index) {
-						0 -> GalleryImporter.switchToAlbum(this) // 갤러리
+						0 -> {
+							val leftCount = MAX_IMAGE_COUNT - previewRecyclerAdapter.itemCount
+							GalleryImporter.startMultiImage(this, leftCount) { showMultiImage(it) }
+						} // 갤러리
 						1 -> CameraImporter.switchToCamera(this) // 카메라
 						2 -> UrlImporter.fadeIn(binding.urlInputBox.root) // url
 					}

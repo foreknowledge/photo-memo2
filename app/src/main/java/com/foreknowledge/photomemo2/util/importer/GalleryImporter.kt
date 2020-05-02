@@ -1,40 +1,39 @@
 package com.foreknowledge.photomemo2.util.importer
 
-import android.app.Activity
-import android.content.Intent
+import android.content.Context
 import android.net.Uri
-import android.provider.MediaStore
-import com.foreknowledge.photomemo2.RequestCode
+import android.util.Log
+import com.foreknowledge.photomemo2.MSG_IMAGE_FULL
 import com.foreknowledge.photomemo2.util.FileUtil
+import gun0912.tedimagepicker.builder.TedImagePicker
 import java.io.File
 
 /**
  * Create by Yeji on 27,April,2020.
  */
 object GalleryImporter {
-	fun switchToAlbum(activity: Activity) {
-		val intent = Intent(Intent.ACTION_PICK)
-		intent.type = MediaStore.Images.Media.CONTENT_TYPE
-
-		activity.startActivityForResult(intent, RequestCode.CHOOSE_GALLERY_IMAGE)
+	fun startMultiImage(
+			context: Context,
+			maxCount: Int,
+			maxMessage: String = MSG_IMAGE_FULL,
+			showMultiImage:(list: List<Uri>) -> Unit
+	) {
+		TedImagePicker.with(context)
+				.showCameraTile(false)
+				.max(maxCount, maxMessage)
+				.errorListener { message -> Log.d(javaClass.simpleName, "error: $message") }
+				.startMultiImage { list: List<Uri> -> showMultiImage(list) }
 	}
 
-	fun getImageFilePath(activity: Activity, data: Uri): String {
+	fun getFilePath(context: Context, data: Uri): String {
 		data.path?.let {
-			activity.contentResolver.query(data, null, null, null, null)
-					.use {
-						it?.let{
-							it.moveToNext()
-
-							return copyImage(activity, it.getString(it.getColumnIndex("_data")))
-						}
-					}
+			return copyImage(context, it)
 		}
 		return ""
 	}
 
-	private fun copyImage(activity: Activity, originalFilePath: String): String {
-		val newFile = FileUtil.createJpgFile(activity)
+	private fun copyImage(context: Context, originalFilePath: String): String {
+		val newFile = FileUtil.createJpgFile(context)
 		File(originalFilePath).copyTo(newFile, true)
 
 		return newFile.absolutePath

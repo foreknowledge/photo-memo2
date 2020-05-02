@@ -41,10 +41,12 @@
 			android:name="androidx.core.content.FileProvider"
 			android:authorities="${packageName}.fileprovider"
 			android:exported="false"
-			android:grantUriPermissions="true">
+			android:grantUriPermissions="true"
+			tools:replace="android:authorities">
 			<meta-data
 				android:name="android.support.FILE_PROVIDER_PATHS"
-				android:resource="@xml/external" />
+				android:resource="@xml/external"
+				tools:replace="android:resource"/>
 		</provider>
 	</application>
 

@@ -68,6 +68,14 @@ class PreviewRecyclerAdapter
 		notifyDataSetChanged()
 	}
 
+	fun addPaths(paths: List<String>) {
+		paths.forEach {
+			history.add(PhotoHistory(ADD_IMAGE, it))
+			items.add(it)
+		}
+		notifyDataSetChanged()
+	}
+
 	fun isFull() = itemCount == MAX_IMAGE_COUNT
 
 	@SuppressLint("ClickableViewAccessibility")

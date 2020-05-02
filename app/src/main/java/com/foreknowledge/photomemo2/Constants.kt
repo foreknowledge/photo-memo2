@@ -10,10 +10,9 @@ const val EXTRA_PHOTO_POSITION = "photo_position"
 
 const val MAX_IMAGE_COUNT = 10
 
-const val MSG_IMAGE_FULL = "이미지 첨부는 ${MAX_IMAGE_COUNT}개까지만 가능합니다."
+const val MSG_IMAGE_FULL = "이미지 첨부는 ${MAX_IMAGE_COUNT}개까지 가능합니다."
 
 object RequestCode {
 	const val PERMISSION_REQUEST_CODE = 100
 	const val CHOOSE_CAMERA_IMAGE = 101
-	const val CHOOSE_GALLERY_IMAGE = 102
 }
