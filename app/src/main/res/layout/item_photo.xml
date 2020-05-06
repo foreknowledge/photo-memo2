@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+        <variable name="item" type="String" />
+        <variable
+          name="listener"
+          type="com.foreknowledge.photomemo2.listener.OnItemClickListener" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+      xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_margin="3dp"
+      app:cardCornerRadius="10dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent">
+
+            <ImageView
+              android:id="@+id/iv_image_item"
+              android:layout_width="0dp"
+              android:layout_height="0dp"
+              android:scaleType="centerCrop"
+              android:adjustViewBounds="true"
+              android:contentDescription="@string/text_image_description"
+              android:onClick="@{() -> listener.onClick(item)}"
+              app:bind_imagePath="@{item}"
+              app:layout_constraintDimensionRatio="1:1"
+              app:layout_constraintBottom_toBottomOf="parent"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toTopOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</layout>

@@ -21,9 +21,9 @@ abstract class BaseViewHolder<T>(
 		LayoutInflater.from(parent?.context).inflate(layoutResId, parent, false)
 ) {
 	private val tag = javaClass.simpleName
-	private val binding: ViewDataBinding = DataBindingUtil.bind(itemView)!!
+	val binding: ViewDataBinding = DataBindingUtil.bind(itemView)!!
 
-	fun bind(item: Any, listener: OnItemClickListener<T>) {
+	fun bind(item: T, listener: OnItemClickListener<T>) {
 		try {
 			binding.run {
 				setVariable(BR.item, item)

@@ -6,8 +6,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import com.foreknowledge.photomemo2.EXTRA_MEMO_ID
+import com.foreknowledge.photomemo2.EXTRA_PHOTOS
+import com.foreknowledge.photomemo2.EXTRA_PHOTO_POSITION
 import com.foreknowledge.photomemo2.R
+import com.foreknowledge.photomemo2.adapter.PhotoRecyclerAdapter
 import com.foreknowledge.photomemo2.base.BaseActivity
 import com.foreknowledge.photomemo2.databinding.ActivityDetailBinding
 import com.foreknowledge.photomemo2.util.ToastUtil
@@ -19,11 +23,27 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
 		ViewModelProvider(this).get(MemoViewModel::class.java)
 	}
 
+	private val photoRecyclerAdapter = PhotoRecyclerAdapter()
+
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 
 		binding.lifecycleOwner = this
 		binding.goBefore.setOnClickListener { finish() }
+		binding.photoRecyclerView.apply {
+			layoutManager = GridLayoutManager(context, 2)
+			adapter = photoRecyclerAdapter.apply {
+				setOnItemClickListener {
+					startActivity(
+							Intent(this@DetailActivity, PhotoActivity::class.java)
+									.apply {
+										putExtra(EXTRA_PHOTOS, viewModel.currentMemo.value?.photoPaths)
+										putExtra(EXTRA_PHOTO_POSITION, photoRecyclerAdapter.getItemPosition(it))
+									}
+					)
+				}
+			}
+		}
 
 		subscribeUI()
 	}
@@ -34,13 +54,18 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
 	}
 
 	private fun subscribeUI() = with(viewModel) {
-		currentMemo.observe(this@DetailActivity, Observer { binding.item = it })
-		msg.observe(this@DetailActivity, Observer { ToastUtil.makeToast(it) })
+		currentMemo.observe(this@DetailActivity, Observer {
+			binding.item = it
+			it?.photoPaths?.run {
+				if (isNotBlank())
+					photoRecyclerAdapter.replaceItems(split(","))
+			}
+		})
+		msg.observe(this@DetailActivity, Observer { ToastUtil.showToast(it) })
 	}
 
-	private fun deleteMemo() = with (viewModel) {
-		deleteMemo(currentMemo.value!!.id)
-		finish()
+	private fun deleteMemo() = viewModel.currentMemo.value?.let { memo ->
+		viewModel.deleteMemo(memo) { finish() }
 	}
 
 	fun showAlertDialog(view: View) {

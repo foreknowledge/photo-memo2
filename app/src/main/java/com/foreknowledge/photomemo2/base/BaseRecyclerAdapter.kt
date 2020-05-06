@@ -4,6 +4,7 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 import com.foreknowledge.photomemo2.listener.OnItemClickListener
+import com.foreknowledge.photomemo2.listener.OnItemSingleClickListener
 
 /**
  * Create by Yeji on 22,April,2020.
@@ -11,11 +12,20 @@ import com.foreknowledge.photomemo2.listener.OnItemClickListener
 abstract class BaseRecyclerAdapter<T>(
 		@LayoutRes private val layoutResId: Int
 ) : RecyclerView.Adapter<BaseViewHolder<T>>() {
-	protected var items = listOf<Any>()
+	protected val items = mutableListOf<T>()
 
-	var onClickListener = object : OnItemClickListener<T> {
-		override fun onClick(item: T) {
-			// do nothing
+	private var onItemClickListener: OnItemClickListener<T> =
+			object : OnItemClickListener<T> {
+				override fun onClick(item: T) {
+					// default click listener: do nothing
+				}
+			}
+
+	open fun setOnItemClickListener(listener:(item: T) -> Unit) {
+		this.onItemClickListener = object : OnItemSingleClickListener<T>() {
+			override fun onSingleClick(item: T) {
+				listener(item)
+			}
 		}
 	}
 
@@ -24,15 +34,14 @@ abstract class BaseRecyclerAdapter<T>(
 
 	override fun getItemCount(): Int = items.size
 
-	fun getItem(position: Int) = items[position]
-
-	open fun replaceItems(newItems: List<Any>?) {
+	open fun replaceItems(newItems: List<T>?) {
 		if (newItems != null) {
-			items = newItems
+			items.clear()
+			items.addAll(newItems)
 			notifyDataSetChanged()
 		}
 	}
 
 	override fun onBindViewHolder(holder: BaseViewHolder<T>, position: Int) =
-		holder.bind(items[position], onClickListener)
+		holder.bind(items[position], onItemClickListener)
 }

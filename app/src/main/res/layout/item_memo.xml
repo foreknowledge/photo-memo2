@@ -80,7 +80,7 @@
                       android:layout_height="80dp"
                       android:scaleType="centerCrop"
                       android:contentDescription="@string/text_image_description"
-                      app:bind_url_image="@{item.photoPaths}"/>
+                      app:bind_urlImage="@{item.photoPaths}"/>
 
                     <androidx.cardview.widget.CardView
                       android:layout_width="25dp"
@@ -98,7 +98,7 @@
                           android:layout_height="wrap_content"
                           android:layout_gravity="center"
                           android:textColor="@android:color/white"
-                          app:bind_images_count="@{item.photoPaths}" />
+                          app:bind_imagesCount="@{item.photoPaths}" />
 
                     </androidx.cardview.widget.CardView>
 
