@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.ScrollView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -93,8 +94,10 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 
 		if (resultCode == Activity.RESULT_OK && requestCode == CHOOSE_CAMERA_IMAGE) {
 			CameraImporter.getFilePath().let {
-				if (it.isNotBlank())
+				if (it.isNotBlank()) {
 					previewRecyclerAdapter.addPath(BitmapUtil.rotateAndCompressImage(it))
+					focusToBottom()
+				}
 			}
 		}
 	}
@@ -108,6 +111,7 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 			}
 		}
 		previewRecyclerAdapter.addPaths(selectedImagePaths)
+		focusToBottom()
 	}
 
 	/* ######################### button click listener ######################### */
@@ -119,7 +123,11 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 	}
 
 	private fun hideKeyboard() =
-			inputMethodManager.hideSoftInputFromWindow(binding.root.windowToken, 0)
+		inputMethodManager.hideSoftInputFromWindow(binding.root.windowToken, 0)
+
+	private fun focusToBottom() = with(binding) {
+		scrollView.post { scrollView.fullScroll(ScrollView.FOCUS_DOWN) }
+	}
 
 	fun saveMemo(view: View) = with(memoViewModel) {
 		if (isEmptyContents())
@@ -184,6 +192,7 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 						success = { bitmap ->
 							previewRecyclerAdapter.addPath(BitmapUtil.bitmapToImageFile(this@CreateActivity, bitmap!!))
 							hideLoadingBar()
+							focusToBottom()
 							clearPath()
 						},
 						failed = {
