@@ -1,7 +1,5 @@
 package com.foreknowledge.photomemo2.adapter
 
-import android.annotation.SuppressLint
-import android.view.MotionEvent
 import androidx.recyclerview.widget.RecyclerView
 import com.foreknowledge.photomemo2.MAX_IMAGE_COUNT
 import com.foreknowledge.photomemo2.R
@@ -18,15 +16,10 @@ import com.foreknowledge.photomemo2.util.FileUtil
  */
 class PreviewRecyclerAdapter
 	: BaseRecyclerAdapter<String>(R.layout.item_preview), OnItemMoveListener {
-	companion object {
-		const val ADD_IMAGE = 1
-		const val DELETE_IMAGE = -1
-	}
-
-	data class PhotoHistory(val type: Int, val imagePath: String)
-
 	private val originalImgPaths: List<String> = items
 	private val history = mutableListOf<PhotoHistory>()
+
+	private data class PhotoHistory(val type: Int, val imagePath: String)
 
 	private var onItemDragListener: OnItemDragListener =
 			object: OnItemDragListener {
@@ -77,7 +70,6 @@ class PreviewRecyclerAdapter
 
 	fun isFull() = itemCount == MAX_IMAGE_COUNT
 
-	@SuppressLint("ClickableViewAccessibility")
 	override fun onBindViewHolder(holder: BaseViewHolder<String>, position: Int) {
 		holder.bind(items[position], object: OnItemClickListener<String>{
 			override fun onClick(item: String) {
@@ -87,11 +79,9 @@ class PreviewRecyclerAdapter
 			}
 		})
 
-		(holder.binding as ItemPreviewBinding).imagePreview.setOnTouchListener { _, event ->
-			if (event.actionMasked == MotionEvent.ACTION_DOWN)
-				onItemDragListener.onStartDrag(holder)
-
-			false
+		(holder.binding as ItemPreviewBinding).imagePreview.setOnLongClickListener {
+			onItemDragListener.onStartDrag(holder)
+			true
 		}
 	}
 
@@ -101,5 +91,10 @@ class PreviewRecyclerAdapter
 		items.add(toPosition, target)
 
 		notifyItemMoved(fromPosition, toPosition)
+	}
+
+	companion object {
+		const val ADD_IMAGE = 1
+		const val DELETE_IMAGE = -1
 	}
 }
