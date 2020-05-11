@@ -17,19 +17,19 @@ import com.foreknowledge.photomemo2.util.FileUtil
 class PreviewRecyclerAdapter
 	: BaseRecyclerAdapter<String>(R.layout.item_preview), OnItemMoveListener {
 	private val originalImgPaths: List<String> = items
-	private val history = mutableListOf<PhotoHistory>()
+	private val actionHistory = mutableListOf<Action>()
 
-	private data class PhotoHistory(val type: Int, val imagePath: String)
+	private data class Action(val type: Int, val imagePath: String)
 
 	private var onItemDragListener: OnItemDragListener =
-			object: OnItemDragListener {
-				override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
-					// default drag listener: do nothing
-				}
+		object : OnItemDragListener {
+			override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
+				// default drag listener: do nothing
 			}
+		}
 
 	fun setOnItemDragListener(listener: (viewHolder: RecyclerView.ViewHolder) -> Unit) {
-		this.onItemDragListener = object: OnItemDragListener {
+		this.onItemDragListener = object : OnItemDragListener {
 			override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
 				listener(viewHolder)
 			}
@@ -37,32 +37,30 @@ class PreviewRecyclerAdapter
 	}
 
 	fun getImages(): List<String> {
-		for (action in history)
-			when (action.type) {
-				DELETE_IMAGE -> FileUtil.deleteFile(action.imagePath)
-			}
+		for (action in actionHistory)
+			if (action.type == DELETE_IMAGE)
+				FileUtil.deleteFile(action.imagePath)
 
 		return items
 	}
 
 	fun restoreImages(): List<String> {
-		for (action in history)
-			when (action.type) {
-				ADD_IMAGE -> FileUtil.deleteFile(action.imagePath)
-			}
+		for (action in actionHistory)
+			if (action.type == ADD_IMAGE)
+				FileUtil.deleteFile(action.imagePath)
 
 		return originalImgPaths
 	}
 
 	fun addPath(path: String) {
-		history.add(PhotoHistory(ADD_IMAGE, path))
+		actionHistory.add(Action(ADD_IMAGE, path))
 		items.add(path)
 		notifyDataSetChanged()
 	}
 
 	fun addPaths(paths: List<String>) {
 		paths.forEach {
-			history.add(PhotoHistory(ADD_IMAGE, it))
+			actionHistory.add(Action(ADD_IMAGE, it))
 			items.add(it)
 		}
 		notifyDataSetChanged()
@@ -71,9 +69,9 @@ class PreviewRecyclerAdapter
 	fun isFull() = itemCount == MAX_IMAGE_COUNT
 
 	override fun onBindViewHolder(holder: BaseViewHolder<String>, position: Int) {
-		holder.bind(items[position], object: OnItemClickListener<String>{
+		holder.bind(items[position], object : OnItemClickListener<String>{
 			override fun onClick(item: String) {
-				history.add(PhotoHistory(DELETE_IMAGE, item))
+				actionHistory.add(Action(DELETE_IMAGE, item))
 				items.remove(item)
 				notifyDataSetChanged()
 			}

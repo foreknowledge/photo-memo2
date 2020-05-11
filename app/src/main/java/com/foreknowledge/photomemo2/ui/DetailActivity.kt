@@ -35,11 +35,11 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
 			adapter = photoRecyclerAdapter.apply {
 				setOnItemClickListener {
 					startActivity(
-							Intent(this@DetailActivity, PhotoActivity::class.java)
-									.apply {
-										putExtra(EXTRA_PHOTOS, viewModel.currentMemo.value?.photoPaths)
-										putExtra(EXTRA_PHOTO_POSITION, photoRecyclerAdapter.getItemPosition(it))
-									}
+						Intent(this@DetailActivity, PhotoActivity::class.java)
+							.apply {
+								putExtra(EXTRA_PHOTOS, viewModel.currentMemo.value?.photoPaths)
+								putExtra(EXTRA_PHOTO_POSITION, photoRecyclerAdapter.getItemPosition(it))
+							}
 					)
 				}
 			}
@@ -70,13 +70,13 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
 
 	fun showAlertDialog(view: View) {
 		AlertDialog.Builder(this)
-				.setMessage(getString(R.string.delete_message))
-				.setPositiveButton( getString(R.string.btn_ok_text) ) { _, _ -> deleteMemo() }
-				.setNegativeButton( getString(R.string.btn_cancel_text) ) { dialog, _ -> dialog.dismiss() }.show()
+			.setMessage(getString(R.string.delete_message))
+			.setPositiveButton( getString(R.string.btn_ok_text) ) { _, _ -> deleteMemo() }
+			.setNegativeButton( getString(R.string.btn_cancel_text) ) { dialog, _ -> dialog.dismiss() }.show()
 	}
 
 	fun editMemo(view: View) =
-			startActivity(Intent(this, CreateActivity::class.java).apply {
-				putExtra(EXTRA_MEMO_ID, viewModel.currentMemo.value!!.id)
-			})
+		startActivity(Intent(this, CreateActivity::class.java).apply {
+			putExtra(EXTRA_MEMO_ID, viewModel.currentMemo.value!!.id)
+		})
 }

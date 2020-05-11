@@ -7,6 +7,11 @@ import android.content.Context
  * Create by Yeji on 22,April,2020.
  */
 class GlobalApplication: Application() {
+	override fun onCreate() {
+		super.onCreate()
+		APPLICATION_CONTEXT = applicationContext
+	}
+
 	companion object {
 		private lateinit var APPLICATION_CONTEXT: Context
 
@@ -14,10 +19,5 @@ class GlobalApplication: Application() {
 		fun getContext(): Context {
 			return APPLICATION_CONTEXT
 		}
-	}
-
-	override fun onCreate() {
-		super.onCreate()
-		APPLICATION_CONTEXT = applicationContext
 	}
 }

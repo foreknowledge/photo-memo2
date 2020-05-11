@@ -11,8 +11,8 @@ import androidx.core.content.ContextCompat
  */
 object PermissionUtil {
 	private fun getPermissions(context: Context) = listOf(
-			ContextCompat.checkSelfPermission(context, android.Manifest.permission.READ_EXTERNAL_STORAGE),
-			ContextCompat.checkSelfPermission(context, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+		ContextCompat.checkSelfPermission(context, android.Manifest.permission.READ_EXTERNAL_STORAGE),
+		ContextCompat.checkSelfPermission(context, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
 	)
 
 	@TargetApi(Build.VERSION_CODES.M)

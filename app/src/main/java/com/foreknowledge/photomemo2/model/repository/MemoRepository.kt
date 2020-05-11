@@ -11,10 +11,7 @@ object MemoRepository {
 	private val memoDataSource = MemoDataSource(GlobalApplication.getContext())
 
 	suspend fun getAllMemos(): List<Memo> = memoDataSource.getAll()
-
 	suspend fun getMemo(id: Long): Memo? = memoDataSource.get(id)
-
 	suspend fun addMemo(memo: Memo) = memoDataSource.add(MemoEntity(memo.id, memo.title, memo.content, memo.photoPaths))
-
 	suspend fun deleteMemo(memoId: Long) = memoDataSource.delete(memoId)
 }

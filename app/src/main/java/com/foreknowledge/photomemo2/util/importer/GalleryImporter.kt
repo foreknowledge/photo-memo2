@@ -13,16 +13,16 @@ import java.io.File
  */
 object GalleryImporter {
 	fun startMultiImage(
-			context: Context,
-			maxCount: Int,
-			maxMessage: String = MSG_IMAGE_FULL,
-			showMultiImage:(list: List<Uri>) -> Unit
+		context: Context,
+		maxCount: Int,
+		maxMessage: String = MSG_IMAGE_FULL,
+		showMultiImage:(list: List<Uri>) -> Unit
 	) {
 		TedImagePicker.with(context)
-				.showCameraTile(false)
-				.max(maxCount, maxMessage)
-				.errorListener { message -> Log.d(javaClass.simpleName, "error: $message") }
-				.startMultiImage { list: List<Uri> -> showMultiImage(list) }
+			.showCameraTile(false)
+			.max(maxCount, maxMessage)
+			.errorListener { message -> Log.d(javaClass.simpleName, "error: $message") }
+			.startMultiImage { list: List<Uri> -> showMultiImage(list) }
 	}
 
 	fun getFilePath(context: Context, data: Uri): String {

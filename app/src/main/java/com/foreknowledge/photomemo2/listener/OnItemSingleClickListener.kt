@@ -7,7 +7,7 @@ import com.foreknowledge.photomemo2.CLICK_INTERVAL
  * Create by Yeji on 26,April,2020.
  */
 abstract class OnItemSingleClickListener<T>(
-		private val clickInterval: Long = CLICK_INTERVAL
+	private val clickInterval: Long = CLICK_INTERVAL
 ): OnItemClickListener<T> {
 	private var mLastClickTime = 0L
 

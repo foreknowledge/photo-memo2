@@ -15,11 +15,11 @@ abstract class BaseRecyclerAdapter<T>(
 	protected val items = mutableListOf<T>()
 
 	private var onItemClickListener: OnItemClickListener<T> =
-			object : OnItemClickListener<T> {
-				override fun onClick(item: T) {
-					// default click listener: do nothing
-				}
+		object : OnItemClickListener<T> {
+			override fun onClick(item: T) {
+				// default click listener: do nothing
 			}
+		}
 
 	open fun setOnItemClickListener(listener:(item: T) -> Unit) {
 		this.onItemClickListener = object : OnItemSingleClickListener<T>() {
@@ -30,7 +30,7 @@ abstract class BaseRecyclerAdapter<T>(
 	}
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-			object : BaseViewHolder<T>(layoutResId, parent) {}
+		object : BaseViewHolder<T>(layoutResId, parent) {}
 
 	override fun getItemCount(): Int = items.size
 

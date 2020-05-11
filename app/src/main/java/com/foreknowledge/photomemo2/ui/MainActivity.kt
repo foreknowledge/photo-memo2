@@ -19,8 +19,10 @@ import com.pedro.library.AutoPermissions
 import com.pedro.library.AutoPermissionsListener
 
 @Suppress("UNUSED_PARAMETER")
-class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main),
-	AutoPermissionsListener {
+class MainActivity :
+	BaseActivity<ActivityMainBinding>(R.layout.activity_main),
+	AutoPermissionsListener
+{
 	private val viewModel by lazy {
 		ViewModelProvider(this).get(MainViewModel::class.java)
 	}
@@ -39,8 +41,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main),
 			adapter = memoRecyclerAdapter.apply {
 				setOnItemClickListener {
 					startActivity(
-							Intent(this@MainActivity, DetailActivity::class.java)
-									.apply { putExtra(EXTRA_MEMO_ID, it.id) }
+						Intent(this@MainActivity, DetailActivity::class.java)
+							.apply { putExtra(EXTRA_MEMO_ID, it.id) }
 					)
 				}
 			}

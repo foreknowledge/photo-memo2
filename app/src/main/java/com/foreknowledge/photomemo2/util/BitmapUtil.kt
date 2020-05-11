@@ -30,19 +30,19 @@ object BitmapUtil {
 
 	private fun compressBitmapToImageFile(imagePath: String, bitmap: Bitmap): String {
 		FileOutputStream(imagePath)
-				.use {
-					bitmap.compress(Bitmap.CompressFormat.JPEG, 50, it)
-					it.flush()
+			.use {
+				bitmap.compress(Bitmap.CompressFormat.JPEG, 50, it)
+				it.flush()
 
-					return imagePath
-				}
+				return imagePath
+			}
 	}
 
 	private fun Bitmap.getRotatedBitmap(photoPath: String): Bitmap {
 		val exifInterface = ExifInterface(photoPath)
 		val orientation: Int = exifInterface.getAttributeInt(
-				ExifInterface.TAG_ORIENTATION,
-				ExifInterface.ORIENTATION_UNDEFINED
+			ExifInterface.TAG_ORIENTATION,
+			ExifInterface.ORIENTATION_UNDEFINED
 		)
 
 		return when (orientation) {

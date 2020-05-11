@@ -134,10 +134,10 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 			ToastUtil.showToast(StringUtil.getString(R.string.msg_vacant_content))
 		else {
 			addMemo(Memo(
-					currentMemo.value?.id ?: 0L,
-					binding.editMemoTitle.text().trim(),
-					binding.editMemoContent.text(),
-					previewRecyclerAdapter.getImages().joinToString(",")
+				currentMemo.value?.id ?: 0L,
+				binding.editMemoTitle.text().trim(),
+				binding.editMemoContent.text(),
+				previewRecyclerAdapter.getImages().joinToString(",")
 			)) { finish() }
 			showLoadingBar()
 		}
@@ -160,17 +160,18 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 		val options = StringUtil.getStringArray(R.array.option_add_image)
 
 		AlertDialog.Builder(this)
-				.setTitle(StringUtil.getString(R.string.text_add_image))
-				.setItems(options) { _, index ->
-					when (index) {
-						0 -> {
-							val leftCount = MAX_IMAGE_COUNT - previewRecyclerAdapter.itemCount
-							GalleryImporter.startMultiImage(this, leftCount) { showMultiImage(it) }
-						} // 갤러리
-						1 -> CameraImporter.switchToCamera(this) // 카메라
-						2 -> UrlImporter.fadeIn(binding.urlInputBox.root) // url
-					}
-				}.show()
+			.setTitle(StringUtil.getString(R.string.text_add_image))
+			.setItems(options) { _, index ->
+				when (index) {
+					0 -> {
+						val leftCount = MAX_IMAGE_COUNT - previewRecyclerAdapter.itemCount
+						GalleryImporter.startMultiImage(this, leftCount) { showMultiImage(it) }
+					} // 갤러리
+
+					1 -> CameraImporter.switchToCamera(this) // 카메라
+					2 -> UrlImporter.fadeIn(binding.urlInputBox.root) // url
+				}
+			}.show()
 	}
 
 	fun hideBox(view: View) {
@@ -184,8 +185,10 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 		when {
 			url.isBlank() ->
 				ToastUtil.showToast(StringUtil.getString(R.string.msg_vacant_url))
+
 			!NetworkUtil.isConnected(this) ->
 				ToastUtil.showToast(StringUtil.getString(R.string.err_network_disconnect))
+
 			else -> with(memoViewModel) {
 				UrlImporter.convertBitmap(
 						this@CreateActivity, url,
