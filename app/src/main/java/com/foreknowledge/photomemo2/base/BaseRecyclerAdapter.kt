@@ -34,12 +34,10 @@ abstract class BaseRecyclerAdapter<T>(
 
 	override fun getItemCount(): Int = items.size
 
-	open fun replaceItems(newItems: List<T>?) {
-		if (newItems != null) {
-			items.clear()
-			items.addAll(newItems)
-			notifyDataSetChanged()
-		}
+	open fun replaceItems(newItems: List<T>) {
+		items.clear()
+		items.addAll(newItems)
+		notifyDataSetChanged()
 	}
 
 	override fun onBindViewHolder(holder: BaseViewHolder<T>, position: Int) =

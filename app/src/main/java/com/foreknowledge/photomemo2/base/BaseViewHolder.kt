@@ -16,9 +16,9 @@ import com.foreknowledge.photomemo2.listener.OnItemClickListener
  */
 abstract class BaseViewHolder<T>(
 		@LayoutRes layoutResId: Int,
-		parent: ViewGroup?
-): RecyclerView.ViewHolder(
-		LayoutInflater.from(parent?.context).inflate(layoutResId, parent, false)
+		parent: ViewGroup
+) : RecyclerView.ViewHolder(
+		LayoutInflater.from(parent.context).inflate(layoutResId, parent, false)
 ) {
 	private val tag = javaClass.simpleName
 	val binding: ViewDataBinding = DataBindingUtil.bind(itemView)!!
