@@ -1,6 +1,5 @@
 package com.foreknowledge.photomemo2.adapter
 
-import android.graphics.BitmapFactory
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
@@ -13,7 +12,7 @@ import com.bumptech.glide.Glide
 @BindingAdapter("bind_urlImage")
 fun ImageView.bindUrlImage(url: String?) {
     if (url == null) return
-    Glide.with(context)
+    Glide.with(this)
         .load(url.split(",")[0])
         .into(this)
 }
@@ -26,5 +25,7 @@ fun TextView.bindImagesCount(url: String?) {
 @BindingAdapter("bind_imagePath")
 fun ImageView.bindImagePath(path: String?) {
     if (path == null) return
-    setImageBitmap(BitmapFactory.decodeFile(path))
+    Glide.with(this)
+        .load(path)
+        .into(this)
 }
