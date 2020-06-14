@@ -54,14 +54,15 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
 	}
 
 	private fun subscribeUI() = with(viewModel) {
-		currentMemo.observe(this@DetailActivity, Observer {
-			binding.item = it
-			it?.photoPaths?.run {
-				if (isNotBlank())
-					photoRecyclerAdapter.replaceItems(split(","))
+		val owner = this@DetailActivity
+		currentMemo.observe(owner, Observer { memo ->
+			binding.item = memo
+			memo?.photoPaths?.let {
+				if (it.isNotBlank())
+					photoRecyclerAdapter.replaceItems(it.split(","))
 			}
 		})
-		msg.observe(this@DetailActivity, Observer { ToastUtil.showToast(it) })
+		msg.observe(owner, Observer { ToastUtil.showToast(it) })
 	}
 
 	private fun deleteMemo() = viewModel.currentMemo.value?.let { memo ->
