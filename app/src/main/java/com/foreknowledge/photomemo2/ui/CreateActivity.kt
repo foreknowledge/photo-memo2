@@ -14,7 +14,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
-import com.foreknowledge.photomemo2.*
+import com.foreknowledge.photomemo2.EXTRA_MEMO_ID
+import com.foreknowledge.photomemo2.MAX_IMAGE_COUNT
+import com.foreknowledge.photomemo2.MSG_IMAGE_FULL
+import com.foreknowledge.photomemo2.R
 import com.foreknowledge.photomemo2.RequestCode.CHOOSE_CAMERA_IMAGE
 import com.foreknowledge.photomemo2.adapter.PreviewRecyclerAdapter
 import com.foreknowledge.photomemo2.base.BaseActivity
@@ -36,13 +39,12 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 		getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 	}
 
-	private lateinit var itemTouchHelper: ItemTouchHelper
 	private val previewRecyclerAdapter = PreviewRecyclerAdapter()
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 
-		itemTouchHelper = ItemTouchHelper(PreviewItemTouchCallback(previewRecyclerAdapter)).apply {
+		val itemTouchHelper = ItemTouchHelper(PreviewItemTouchCallback(previewRecyclerAdapter)).apply {
 			attachToRecyclerView(binding.previewRecyclerView)
 		}
 
@@ -75,14 +77,15 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 	}
 
 	private fun subscribeUI() = with(memoViewModel) {
-		currentMemo.observe(this@CreateActivity, Observer {
-			binding.item = it
-			it?.photoPaths?.run {
-				if (isNotBlank())
-					previewRecyclerAdapter.replaceItems(split(","))
+		val owner = this@CreateActivity
+		currentMemo.observe(owner, Observer { memo ->
+			binding.item = memo
+			memo?.photoPaths?.let {
+				if (it.isNotBlank())
+					previewRecyclerAdapter.replaceItems(it.split(","))
 			}
 		})
-		msg.observe(this@CreateActivity, Observer { ToastUtil.showToast(it) })
+		msg.observe(owner, Observer { ToastUtil.showToast(it) })
 	}
 
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
