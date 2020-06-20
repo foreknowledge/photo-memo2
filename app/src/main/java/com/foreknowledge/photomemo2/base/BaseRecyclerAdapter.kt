@@ -15,12 +15,7 @@ abstract class BaseRecyclerAdapter<T>(
 		diffCallback: DiffUtil.ItemCallback<T>
 ) : ListAdapter<T, BaseViewHolder<T>>(diffCallback) {
 
-	private var onItemClickListener: OnItemClickListener<T> =
-		object : OnItemClickListener<T> {
-			override fun onClick(item: T) {
-				// default click listener: do nothing
-			}
-		}
+	private var onItemClickListener: OnItemClickListener<T>? = null
 
 	open fun setOnItemClickListener(listener:(item: T) -> Unit) {
 		this.onItemClickListener = object : OnItemSingleClickListener<T>() {

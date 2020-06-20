@@ -23,7 +23,7 @@ abstract class BaseViewHolder<T>(
 	private val tag = javaClass.simpleName
 	val binding: ViewDataBinding = DataBindingUtil.bind(itemView)!!
 
-	fun bind(item: T, listener: OnItemClickListener<T>) {
+	fun bind(item: T, listener: OnItemClickListener<T>?) {
 		try {
 			binding.run {
 				setVariable(BR.item, item)
