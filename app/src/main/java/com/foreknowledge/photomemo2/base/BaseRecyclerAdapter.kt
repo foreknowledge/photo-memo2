@@ -18,7 +18,7 @@ abstract class BaseRecyclerAdapter<T>(
 	private var onItemClickListener: OnItemClickListener<T>? = null
 
 	open fun setOnItemClickListener(listener:(item: T) -> Unit) {
-		this.onItemClickListener = object : OnItemSingleClickListener<T>() {
+		this.onItemClickListener = object: OnItemSingleClickListener<T>() {
 			override fun onSingleClick(item: T) {
 				listener(item)
 			}
@@ -26,7 +26,7 @@ abstract class BaseRecyclerAdapter<T>(
 	}
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-		object : BaseViewHolder<T>(layoutResId, parent) {}
+		object: BaseViewHolder<T>(layoutResId, parent) {}
 
 	open fun replaceItems(newItems: List<T>) = submitList(newItems)
 

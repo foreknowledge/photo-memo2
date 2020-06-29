@@ -23,7 +23,7 @@ class PreviewRecyclerAdapter : RecyclerView.Adapter<BaseViewHolder<String>>(), O
 	private var onItemDragListener: OnItemDragListener? = null
 
 	fun setOnItemDragListener(listener: (viewHolder: RecyclerView.ViewHolder) -> Unit) {
-		this.onItemDragListener = object : OnItemDragListener {
+		this.onItemDragListener = object: OnItemDragListener {
 			override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
 				listener(viewHolder)
 			}
@@ -65,10 +65,10 @@ class PreviewRecyclerAdapter : RecyclerView.Adapter<BaseViewHolder<String>>(), O
 	override fun getItemCount() = items.size
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-		object : BaseViewHolder<String>(R.layout.item_preview, parent) {}
+		object: BaseViewHolder<String>(R.layout.item_preview, parent) {}
 
 	override fun onBindViewHolder(holder: BaseViewHolder<String>, position: Int) {
-		holder.bind(items[position], object : OnItemClickListener<String>{
+		holder.bind(items[position], object: OnItemClickListener<String>{
 			override fun onClick(item: String) {
 				actionHistory.add(Action(FLAG_DELETE_IMAGE, item))
 				items.remove(item)

@@ -33,7 +33,7 @@ class PhotoActivity : BaseActivity<ActivityPhotoBinding>(R.layout.activity_photo
 			adapter = photoViewPagerAdapter
 			orientation = ViewPager2.ORIENTATION_HORIZONTAL
 			setCurrentItem(currentPosition, false)
-			registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+			registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
 				override fun onPageSelected(position: Int) {
 					setPageNumber(position, totalImageCount)
 				}

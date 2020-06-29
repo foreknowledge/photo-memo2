@@ -35,7 +35,7 @@ object UrlImporter {
 		targetView.animate()
 			.alpha(0f)
 			.setDuration(300L)
-			.setListener(object : AnimatorListenerAdapter() {
+			.setListener(object: AnimatorListenerAdapter() {
 				override fun onAnimationEnd(animation: Animator) {
 					targetView.visibility = View.GONE
 				}
@@ -51,7 +51,7 @@ object UrlImporter {
 		Glide.with(context)
 			.asBitmap()
 			.load(url)
-			.listener(object : RequestListener<Bitmap> {
+			.listener(object: RequestListener<Bitmap> {
 				override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Bitmap>?, isFirstResource: Boolean): Boolean {
 					coroutineScope.launch { failed() }
 					return false
