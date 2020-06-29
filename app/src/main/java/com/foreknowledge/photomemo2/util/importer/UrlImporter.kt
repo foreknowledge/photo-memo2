@@ -45,8 +45,8 @@ object UrlImporter {
 	fun convertBitmap(
 		context: Context,
 		url: String,
-		success:(bitmap: Bitmap?) -> Unit,
-		failed:() -> Unit
+		success: (bitmap: Bitmap?) -> Unit,
+		failed: () -> Unit
 	) {
 		Glide.with(context)
 			.asBitmap()

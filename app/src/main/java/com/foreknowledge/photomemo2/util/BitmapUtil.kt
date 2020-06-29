@@ -14,7 +14,6 @@ import java.io.FileOutputStream
 object BitmapUtil {
 	fun bitmapToImageFile(context: Context, bitmap: Bitmap): String {
 		val imageFile = FileUtil.createJpgFile(context)
-
 		return compressBitmapToImageFile(imageFile.absolutePath, bitmap)
 	}
 

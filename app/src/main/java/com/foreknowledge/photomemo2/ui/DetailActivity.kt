@@ -33,15 +33,7 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
 		binding.photoRecyclerView.apply {
 			layoutManager = GridLayoutManager(context, 2)
 			adapter = photoRecyclerAdapter.apply {
-				setOnItemClickListener {
-					startActivity(
-						Intent(this@DetailActivity, PhotoActivity::class.java)
-							.apply {
-								putExtra(EXTRA_PHOTOS, viewModel.currentMemo.value?.photoPaths)
-								putExtra(EXTRA_PHOTO_POSITION, photoRecyclerAdapter.getItemPosition(it))
-							}
-					)
-				}
+				setOnItemClickListener { startPhotoActivity(it) }
 			}
 		}
 
@@ -51,6 +43,16 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
 	override fun onResume() {
 		super.onResume()
 		viewModel.getMemo(intent.getLongExtra(EXTRA_MEMO_ID, 0))
+	}
+
+	private fun startPhotoActivity(photoPath: String) {
+		startActivity(
+			Intent(this@DetailActivity, PhotoActivity::class.java)
+				.apply {
+					putExtra(EXTRA_PHOTOS, viewModel.currentMemo.value?.photoPaths)
+					putExtra(EXTRA_PHOTO_POSITION, photoRecyclerAdapter.getItemPosition(photoPath))
+				}
+		)
 	}
 
 	private fun subscribeUI() = with(viewModel) {
@@ -65,9 +67,10 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
 		msg.observe(owner, Observer { ToastUtil.showToast(it) })
 	}
 
-	private fun deleteMemo() = viewModel.currentMemo.value?.let { memo ->
-		viewModel.deleteMemo(memo) { finish() }
-	}
+	fun startCreateActivity(view: View) =
+		startActivity(Intent(this, CreateActivity::class.java).apply {
+			putExtra(EXTRA_MEMO_ID, viewModel.currentMemo.value!!.id)
+		})
 
 	fun showAlertDialog(view: View) {
 		AlertDialog.Builder(this)
@@ -76,8 +79,7 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
 			.setNegativeButton( getString(R.string.btn_cancel_text) ) { dialog, _ -> dialog.dismiss() }.show()
 	}
 
-	fun editMemo(view: View) =
-		startActivity(Intent(this, CreateActivity::class.java).apply {
-			putExtra(EXTRA_MEMO_ID, viewModel.currentMemo.value!!.id)
-		})
+	private fun deleteMemo() = viewModel.currentMemo.value?.let { memo ->
+		viewModel.deleteMemo(memo) { finish() }
+	}
 }

@@ -17,12 +17,12 @@ abstract class DatabaseService : RoomDatabase() {
 
 		private var instance: DatabaseService? = null
 
+		fun getInstance(context: Context): DatabaseService =
+			(instance ?: create(context)).also { instance = it }
+
 		private fun create(context: Context): DatabaseService =
 			Room.databaseBuilder(context, DatabaseService::class.java, DATABASE_NAME)
 				.fallbackToDestructiveMigration()
 				.build()
-
-		fun getInstance(context: Context): DatabaseService =
-			(instance ?: create(context)).also { instance = it }
 	}
 }

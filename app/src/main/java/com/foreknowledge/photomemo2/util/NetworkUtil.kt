@@ -4,28 +4,40 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import androidx.annotation.RequiresApi
 
 /**
  * Create by Yeji on 30,April,2020.
  */
 @Suppress("DEPRECATION")
 object NetworkUtil {
+	private var connectivityManager: ConnectivityManager? = null
+
 	fun isConnected(context: Context): Boolean {
-		val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+		connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-			val network = connectivityManager.activeNetwork
-			val capabilities = connectivityManager.getNetworkCapabilities(network)
+		return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+			checkConnectionHigherVersion()
+		else
+			checkConnectionLowerVersion()
+	}
 
-			capabilities?.let {
-				return it.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
-						it.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
-			}
+	@RequiresApi(Build.VERSION_CODES.M)
+	private fun checkConnectionHigherVersion(): Boolean {
+		val network = connectivityManager?.activeNetwork
+		val capabilities = connectivityManager?.getNetworkCapabilities(network)
+
+		capabilities?.let {
+			return it.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+					it.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
 		}
-		else {
-			connectivityManager.activeNetworkInfo?.let {
-				return it.isConnectedOrConnecting
-			}
+
+		return false
+	}
+
+	private fun checkConnectionLowerVersion(): Boolean {
+		connectivityManager?.activeNetworkInfo?.let {
+			return it.isConnectedOrConnecting
 		}
 
 		return false

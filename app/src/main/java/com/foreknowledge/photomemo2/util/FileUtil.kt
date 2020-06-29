@@ -19,7 +19,8 @@ object FileUtil {
 	fun deleteFile(filePath: String) = File(filePath).delete()
 
 	fun deleteFiles(filePaths: List<String>) {
-		for (filePath in filePaths)
+		filePaths.forEach { filePath ->
 			deleteFile(filePath)
+		}
 	}
 }

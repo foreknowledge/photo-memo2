@@ -13,6 +13,7 @@ import com.foreknowledge.photomemo2.RequestCode.PERMISSION_REQUEST_CODE
 import com.foreknowledge.photomemo2.adapter.MemoRecyclerAdapter
 import com.foreknowledge.photomemo2.base.BaseActivity
 import com.foreknowledge.photomemo2.databinding.ActivityMainBinding
+import com.foreknowledge.photomemo2.model.data.Memo
 import com.foreknowledge.photomemo2.util.StringUtil
 import com.foreknowledge.photomemo2.viewmodel.MainViewModel
 import com.pedro.library.AutoPermissions
@@ -39,12 +40,7 @@ class MainActivity :
 				stackFromEnd = true
 			}
 			adapter = memoRecyclerAdapter.apply {
-				setOnItemClickListener {
-					startActivity(
-						Intent(this@MainActivity, DetailActivity::class.java)
-							.apply { putExtra(EXTRA_MEMO_ID, it.id) }
-					)
-				}
+				setOnItemClickListener { startDetailActivity(it) }
 			}
 		}
 
@@ -53,10 +49,11 @@ class MainActivity :
 		AutoPermissions.Companion.loadAllPermissions(this, PERMISSION_REQUEST_CODE)
 	}
 
-	override fun onResume() {
-		super.onResume()
-
-		viewModel.initMemoList()
+	private fun startDetailActivity(memo: Memo) {
+		startActivity(
+			Intent(this@MainActivity, DetailActivity::class.java)
+				.apply { putExtra(EXTRA_MEMO_ID, memo.id) }
+		)
 	}
 
 	private fun subscribeUI() {
@@ -68,6 +65,12 @@ class MainActivity :
 		}
 	}
 
+	override fun onResume() {
+		super.onResume()
+
+		viewModel.initMemoList()
+	}
+
 	fun createMemo(view: View) =
 		startActivity(Intent(this, CreateActivity::class.java))
 
@@ -76,15 +79,14 @@ class MainActivity :
 		AutoPermissions.Companion.parsePermissions(this, requestCode, permissions, this)
 	}
 
-	private fun notifyPermission(msg: String, permissions: Array<String>) {
-		if (permissions.isNotEmpty())
-			Log.d(javaClass.simpleName,"$msg : ${permissions.size}")
-	}
-
 	override fun onDenied(requestCode: Int, permissions: Array<String>) =
 		notifyPermission(StringUtil.getString(R.string.msg_permission_denied), permissions)
 
 	override fun onGranted(requestCode: Int, permissions: Array<String>) =
 		notifyPermission(StringUtil.getString(R.string.msg_permission_granted), permissions)
 
+	private fun notifyPermission(msg: String, permissions: Array<String>) {
+		if (permissions.isNotEmpty())
+			Log.d(javaClass.simpleName,"$msg : ${permissions.size}")
+	}
 }

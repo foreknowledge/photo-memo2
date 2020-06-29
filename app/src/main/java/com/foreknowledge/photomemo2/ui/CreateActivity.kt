@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -80,48 +81,43 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 		val owner = this@CreateActivity
 		currentMemo.observe(owner, Observer { memo ->
 			binding.item = memo
-			memo?.photoPaths?.let {
-				if (it.isNotBlank())
-					previewRecyclerAdapter.replaceItems(it.split(","))
-			}
+			replaceItemsWithNullCheck(memo)
 		})
 		msg.observe(owner, Observer { ToastUtil.showToast(it) })
+	}
+
+	private fun replaceItemsWithNullCheck(memo: Memo?) {
+		memo?.photoPaths?.let {
+			if (it.isNotBlank())
+				previewRecyclerAdapter.replaceItems(it.split(","))
+		}
 	}
 
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 		super.onActivityResult(requestCode, resultCode, data)
 
+		hideUrlInputBox()
+
+		if (resultCode == Activity.RESULT_OK && requestCode == CHOOSE_CAMERA_IMAGE)
+			addCameraImage(CameraImporter.getFilePath())
+	}
+
+	private fun hideUrlInputBox() {
 		with(binding.urlInputBox.root) {
 			if (visibility == View.VISIBLE) visibility = View.GONE
 		}
-
-		if (resultCode == Activity.RESULT_OK && requestCode == CHOOSE_CAMERA_IMAGE) {
-			CameraImporter.getFilePath().let {
-				if (it.isNotBlank()) {
-					previewRecyclerAdapter.addPath(BitmapUtil.rotateAndCompressImage(it))
-					focusToBottom()
-				}
-			}
-		}
 	}
 
-	private fun showMultiImage(list: List<Uri>) {
-		val selectedImagePaths = mutableListOf<String>()
-		list.forEach { uri ->
-			GalleryImporter.getFilePath(this, uri).let {
-				if (it.isNotBlank())
-					selectedImagePaths.add(BitmapUtil.rotateAndCompressImage(it))
-			}
+	private fun addCameraImage(filePath: String) {
+		if (filePath.isNotBlank()) {
+			previewRecyclerAdapter.addPath(BitmapUtil.rotateAndCompressImage(filePath))
+			focusToBottom()
 		}
-		previewRecyclerAdapter.addPaths(selectedImagePaths)
-		focusToBottom()
 	}
-
-	/* ######################### button click listener ######################### */
 
 	private fun EditText.text() = text.toString()
 	private fun EditText.isBlank() = this.text.toString().trim().isBlank()
-	private fun isEmptyContents(): Boolean = with(binding) {
+	private fun isEmptyMemo(): Boolean = with(binding) {
 		editMemoTitle.isBlank() && editMemoContent.isBlank() && previewRecyclerAdapter.itemCount == 0
 	}
 
@@ -133,7 +129,7 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 	}
 
 	fun saveMemo(view: View) = with(memoViewModel) {
-		if (isEmptyContents())
+		if (isEmptyMemo())
 			ToastUtil.showToast(StringUtil.getString(R.string.msg_vacant_content))
 		else {
 			addMemo(Memo(
@@ -177,39 +173,56 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 			}.show()
 	}
 
+	private fun showMultiImage(list: List<Uri>) {
+		previewRecyclerAdapter.addPaths(list.map { convertImagePath(it) })
+		focusToBottom()
+	}
+
+	private fun convertImagePath(uri: Uri): String {
+		GalleryImporter.getFilePath(this, uri).let {
+			if (it.isNotBlank())
+				return BitmapUtil.rotateAndCompressImage(it)
+		}
+		return ""
+	}
+
 	fun hideBox(view: View) {
 		UrlImporter.fadeOut(binding.urlInputBox.root)
 		memoViewModel.clearPath()
 		hideKeyboard()
 	}
 
-	fun adjustUrl(view: View) {
+	fun getUrlImage(view: View) {
 		val url = binding.urlInputBox.etUrl.text()
 		when {
-			url.isBlank() ->
-				ToastUtil.showToast(StringUtil.getString(R.string.msg_vacant_url))
-
-			!NetworkUtil.isConnected(this) ->
-				ToastUtil.showToast(StringUtil.getString(R.string.err_network_disconnect))
-
-			else -> with(memoViewModel) {
-				UrlImporter.convertBitmap(
-						this@CreateActivity, url,
-						success = { bitmap ->
-							previewRecyclerAdapter.addPath(BitmapUtil.bitmapToImageFile(this@CreateActivity, bitmap!!))
-							hideLoadingBar()
-							focusToBottom()
-							clearPath()
-						},
-						failed = {
-							ToastUtil.showToast(StringUtil.getString(R.string.err_url_import))
-							hideLoadingBar()
-						}
-				)
-				showLoadingBar()
-			}
+			url.isBlank() -> ToastUtil.showToast(StringUtil.getString(R.string.msg_vacant_url))
+			!NetworkUtil.isConnected(this) -> ToastUtil.showToast(StringUtil.getString(R.string.err_network_disconnect))
+			else -> convertBitmap(url)
 		}
 
 		hideKeyboard()
+	}
+
+	private fun convertBitmap(url: String) = with(memoViewModel) {
+		UrlImporter.convertBitmap(
+			this@CreateActivity, url,
+			success = { bitmap ->
+				addBitmapToRecyclerView(bitmap!!)
+				memoViewModel.hideLoadingBar()
+				memoViewModel.clearPath()
+				focusToBottom()
+			},
+			failed = {
+				ToastUtil.showToast(StringUtil.getString(R.string.err_url_import))
+				memoViewModel.hideLoadingBar()
+			}
+		)
+		showLoadingBar()
+	}
+
+	private fun addBitmapToRecyclerView(bitmap: Bitmap) {
+		previewRecyclerAdapter.addPath(
+			BitmapUtil.bitmapToImageFile(this@CreateActivity, bitmap)
+		)
 	}
 }

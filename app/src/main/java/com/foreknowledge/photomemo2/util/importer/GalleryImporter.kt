@@ -16,7 +16,7 @@ object GalleryImporter {
 		context: Context,
 		maxCount: Int,
 		maxMessage: String = MSG_IMAGE_FULL,
-		showMultiImage:(list: List<Uri>) -> Unit
+		showMultiImage: (list: List<Uri>) -> Unit
 	) {
 		TedImagePicker.with(context)
 			.showCameraTile(false)
