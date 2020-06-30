@@ -115,19 +115,6 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 		}
 	}
 
-	private fun EditText.text() = text.toString()
-	private fun EditText.isBlank() = this.text.toString().trim().isBlank()
-	private fun isEmptyMemo(): Boolean = with(binding) {
-		editMemoTitle.isBlank() && editMemoContent.isBlank() && previewRecyclerAdapter.itemCount == 0
-	}
-
-	private fun hideKeyboard() =
-		inputMethodManager.hideSoftInputFromWindow(binding.root.windowToken, 0)
-
-	private fun focusToBottom() = with(binding) {
-		scrollView.post { scrollView.fullScroll(ScrollView.FOCUS_DOWN) }
-	}
-
 	fun saveMemo(view: View) = with(memoViewModel) {
 		if (isEmptyMemo())
 			ToastUtil.showToast(StringUtil.getString(R.string.msg_vacant_content))
@@ -141,6 +128,14 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 			showLoadingBar()
 		}
 	}
+
+	private fun isEmptyMemo(): Boolean = with(binding) {
+		editMemoTitle.isBlank() && editMemoContent.isBlank() && previewRecyclerAdapter.itemCount == 0
+	}
+
+	private fun EditText.isBlank() = this.text.toString().trim().isBlank()
+
+	private fun EditText.text() = text.toString()
 
 	fun showMenu(view: View) {
 		hideKeyboard()
@@ -188,7 +183,7 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 
 	fun hideBox(view: View) {
 		UrlImporter.fadeOut(binding.urlInputBox.root)
-		memoViewModel.clearPath()
+		clearUrlPath()
 		hideKeyboard()
 	}
 
@@ -203,13 +198,17 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 		hideKeyboard()
 	}
 
+	private fun hideKeyboard() {
+		inputMethodManager.hideSoftInputFromWindow(binding.root.windowToken, 0)
+	}
+
 	private fun convertBitmap(url: String) = with(memoViewModel) {
 		UrlImporter.convertBitmap(
 			this@CreateActivity, url,
 			success = { bitmap ->
 				addBitmapToRecyclerView(bitmap!!)
 				memoViewModel.hideLoadingBar()
-				memoViewModel.clearPath()
+				clearUrlPath()
 				focusToBottom()
 			},
 			failed = {
@@ -224,5 +223,13 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 		previewRecyclerAdapter.addPath(
 			BitmapUtil.bitmapToImageFile(this@CreateActivity, bitmap)
 		)
+	}
+
+	private fun clearUrlPath() {
+		binding.urlInputBox.etUrl.setText("")
+	}
+
+	private fun focusToBottom() = with(binding) {
+		scrollView.post { scrollView.fullScroll(ScrollView.FOCUS_DOWN) }
 	}
 }
