@@ -58,9 +58,15 @@ class PhotoActivity : BaseActivity<ActivityPhotoBinding>(R.layout.activity_photo
 		// 권한 체크
 		if (PermissionUtil.isPermissionGranted(this)) {
 			val filePath = photoViewPagerAdapter.currentList[currentPosition]
-			DownloadUtil.downloadImage(this, filePath)
+			DownloadUtil.downloadImage(this, filePath) { showToastOnMain() }
 		} else {
 			ToastUtil.showToast(StringUtil.getString(R.string.err_permission_denied), this)
+		}
+	}
+
+	private fun showToastOnMain() {
+		runOnUiThread {
+			ToastUtil.showToast(StringUtil.getString(R.string.download_success), this)
 		}
 	}
 }

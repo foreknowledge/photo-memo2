@@ -35,4 +35,5 @@
 	<string name="delete_message">메모를 삭제하시겠습니까?</string>
 	<string name="btn_ok_text">삭제</string>
 	<string name="btn_cancel_text">취소</string>
+    <string name="download_success">저장되었습니다.</string>
 </resources>

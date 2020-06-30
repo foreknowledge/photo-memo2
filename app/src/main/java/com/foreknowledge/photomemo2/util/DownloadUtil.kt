@@ -3,11 +3,13 @@ package com.foreknowledge.photomemo2.util
 import android.content.ContentValues
 import android.content.Context
 import android.media.MediaScannerConnection
+import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import androidx.annotation.RequiresApi
+import com.foreknowledge.photomemo2.listener.OnDownloadListener
 import java.io.File
 
 /**
@@ -20,8 +22,10 @@ object DownloadUtil {
     private var filePath = ""
     private var directoryName = ""
 
-    fun downloadImage(context: Context, filePath: String) {
-        init(filePath)
+    private var onDownloadListener: OnDownloadListener? = null
+
+    fun downloadImage(context: Context, filePath: String, onSuccess: () -> Unit) {
+        init(filePath, onSuccess)
         throwExceptionIfFilePathIsBlank()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
@@ -30,8 +34,13 @@ object DownloadUtil {
             downloadFileLowerVersion(context)
     }
 
-    private fun init(filePath: String) {
+    private fun init(filePath: String, onSuccess: () -> Unit) {
         this.filePath = filePath
+        this.onDownloadListener = object: OnDownloadListener {
+            override fun onSuccess(imagePath: String, uri: Uri) {
+                onSuccess()
+            }
+        }
 
         if (directoryName.isBlank()) {
             this.directoryName = "${Environment.DIRECTORY_PICTURES}/$DIRECTORY_NAME"
@@ -75,6 +84,8 @@ object DownloadUtil {
             context,
             arrayOf(file.absolutePath),
             arrayOf(MIME_TYPE)
-        ) { _, _ -> }
+        ) { path, uri ->
+            onDownloadListener?.onSuccess(path, uri)
+        }
     }
 }
