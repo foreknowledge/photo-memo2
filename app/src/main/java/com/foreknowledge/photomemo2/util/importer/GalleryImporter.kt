@@ -27,13 +27,13 @@ object GalleryImporter {
 
 	fun getFilePath(context: Context, data: Uri): String {
 		data.path?.let {
-			return copyImage(context, it)
+			return copyImageAndReturnFilePath(context, it)
 		}
 		return ""
 	}
 
-	private fun copyImage(context: Context, originalFilePath: String): String {
-		val newFile = FileUtil.createJpgFile(context)
+	private fun copyImageAndReturnFilePath(context: Context, originalFilePath: String): String {
+		val newFile = FileUtil.createJpgFileExternal(context)
 		File(originalFilePath).copyTo(newFile, true)
 
 		return newFile.absolutePath
