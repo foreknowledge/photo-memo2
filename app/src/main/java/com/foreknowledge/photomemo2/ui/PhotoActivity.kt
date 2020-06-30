@@ -66,7 +66,7 @@ class PhotoActivity : BaseActivity<ActivityPhotoBinding>(R.layout.activity_photo
 
 	private fun showToastOnMain() {
 		runOnUiThread {
-			ToastUtil.showToast(StringUtil.getString(R.string.download_success), this)
+			ToastUtil.showToast(StringUtil.getString(R.string.msg_save), this)
 		}
 	}
 }
