@@ -1,6 +1,7 @@
 package com.foreknowledge.photomemo2.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.viewpager2.widget.ViewPager2
 import com.foreknowledge.photomemo2.EXTRA_PHOTOS
@@ -57,10 +58,20 @@ class PhotoActivity : BaseActivity<ActivityPhotoBinding>(R.layout.activity_photo
 	fun downloadImage(view: View) {
 		// 권한 체크
 		if (PermissionUtil.isPermissionGranted(this)) {
+			downloadImageWithHandling()
+		} else {
+			Log.d(TAG, "downloadImage(): Permission denied")
+			ToastUtil.showToast(StringUtil.getString(R.string.err_permission_denied), this)
+		}
+	}
+
+	private fun downloadImageWithHandling() {
+		try {
 			val filePath = photoViewPagerAdapter.currentList[currentPosition]
 			DownloadUtil.downloadImage(this, filePath) { showToastOnMain() }
-		} else {
-			ToastUtil.showToast(StringUtil.getString(R.string.err_permission_denied), this)
+		} catch (e: IllegalArgumentException) {
+			Log.d(TAG, "download Image Error: ${e.message}")
+			ToastUtil.showToast(StringUtil.getString(R.string.download_fail), this)
 		}
 	}
 
@@ -68,5 +79,9 @@ class PhotoActivity : BaseActivity<ActivityPhotoBinding>(R.layout.activity_photo
 		runOnUiThread {
 			ToastUtil.showToast(StringUtil.getString(R.string.msg_save), this)
 		}
+	}
+
+	companion object {
+		private const val TAG = "PhotoActivity"
 	}
 }

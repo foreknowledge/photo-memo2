@@ -3,14 +3,15 @@ package com.foreknowledge.photomemo2.util
 import android.content.ContentValues
 import android.content.Context
 import android.media.MediaScannerConnection
-import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
 import androidx.annotation.RequiresApi
 import com.foreknowledge.photomemo2.listener.OnDownloadListener
 import java.io.File
+import java.nio.file.Files
+import java.nio.file.Paths
+import kotlin.IllegalArgumentException
 
 /**
  * Create by Yeji on 30,June,2020.
@@ -37,7 +38,7 @@ object DownloadUtil {
     private fun init(filePath: String, onSuccess: () -> Unit) {
         this.filePath = filePath
         this.onDownloadListener = object: OnDownloadListener {
-            override fun onSuccess(imagePath: String, uri: Uri) {
+            override fun onSuccess() {
                 onSuccess()
             }
         }
@@ -55,7 +56,7 @@ object DownloadUtil {
 
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun downloadFileHigherVersion(context: Context) {
-        val fileName = FileUtil.getFilePrefix()
+        val fileName = getNewFileName()
 
         val contentValues = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
@@ -66,11 +67,19 @@ object DownloadUtil {
         val resolver = context.contentResolver
         resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)?.let { uri ->
             resolver.openOutputStream(uri).use {
-                Log.d("test", "Higher: ${uri.path} Stream opened.")
+                Files.copy(Paths.get(filePath), it)
             }
+            onDownloadListener?.onSuccess()
         }
     }
 
+    private fun getNewFileName(): String {
+        val prefix = FileUtil.getFilePrefix()
+        val suffix = FileUtil.getFileSuffix()
+        return createTempFile(prefix, suffix).name
+    }
+
+    @Suppress("DEPRECATION")
     private fun downloadFileLowerVersion(context: Context) {
         val directory = Environment.getExternalStoragePublicDirectory(directoryName)
         if (!directory.exists()) {
@@ -78,14 +87,18 @@ object DownloadUtil {
         }
 
         val file = FileUtil.createJpgFile(directory)
-        File(filePath).copyTo(file, true)
 
-        MediaScannerConnection.scanFile(
-            context,
-            arrayOf(file.absolutePath),
-            arrayOf(MIME_TYPE)
-        ) { path, uri ->
-            onDownloadListener?.onSuccess(path, uri)
+        copyTo(file)
+        scanMedia(context, arrayOf(file.absolutePath))
+    }
+
+    private fun copyTo(newFile: File) {
+        File(filePath).copyTo(newFile, true)
+    }
+
+    private fun scanMedia(context: Context, paths: Array<String>) {
+        MediaScannerConnection.scanFile(context, paths, null) { _, _ ->
+            onDownloadListener?.onSuccess()
         }
     }
 }

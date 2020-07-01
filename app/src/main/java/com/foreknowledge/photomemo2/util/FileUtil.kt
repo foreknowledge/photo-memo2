@@ -16,13 +16,15 @@ object FileUtil {
 	}
 
 	fun createJpgFile(directory: File?): File {
-		return File.createTempFile(getFilePrefix(), ".jpg", directory)
+		return File.createTempFile(getFilePrefix(), getFileSuffix(), directory)
 	}
 
 	fun getFilePrefix(): String {
 		val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
 		return "JPEG_${timeStamp}_"
 	}
+
+	fun getFileSuffix() = ".jpg"
 
 	fun deleteFile(filePath: String) = File(filePath).delete()
 
