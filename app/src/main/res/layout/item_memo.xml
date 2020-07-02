@@ -80,7 +80,7 @@
                         android:layout_height="80dp"
                         android:scaleType="centerCrop"
                         android:contentDescription="@string/text_image_description"
-                        app:bind_urlImage="@{item.photoPaths}"/>
+                        app:bind_thumbnail="@{item.photoPaths}"/>
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="25dp"

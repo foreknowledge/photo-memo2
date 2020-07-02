@@ -9,11 +9,13 @@ import com.bumptech.glide.Glide
  * Create by Yeji on 22,April,2020.
  */
 
-@BindingAdapter("bind_urlImage")
-fun ImageView.bindUrlImage(url: String?) {
+@BindingAdapter("bind_thumbnail")
+fun ImageView.bindThumbnail(url: String?) {
     if (url == null) return
+
+    val firstUrl = url.split(",")[0]
     Glide.with(this)
-        .load(url.split(",")[0])
+        .load(firstUrl)
         .into(this)
 }
 
