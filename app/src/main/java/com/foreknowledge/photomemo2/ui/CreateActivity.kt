@@ -159,7 +159,7 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 				when (index) {
 					0 -> {
 						val leftCount = MAX_IMAGE_COUNT - previewRecyclerAdapter.itemCount
-						GalleryImporter.startMultiImage(this, leftCount) { showMultiImage(it) }
+						GalleryImporter.startMultiImage(this, leftCount) { addSelectedImage(it) }
 					} // 갤러리
 
 					1 -> CameraImporter.switchToCamera(this) // 카메라
@@ -168,13 +168,13 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 			}.show()
 	}
 
-	private fun showMultiImage(list: List<Uri>) {
-		previewRecyclerAdapter.addPaths(list.map { convertImagePath(it) })
+	private fun addSelectedImage(list: List<Uri>) {
+		previewRecyclerAdapter.addPaths(list.map { it.toImagePath() })
 		focusToBottom()
 	}
 
-	private fun convertImagePath(uri: Uri): String {
-		GalleryImporter.getFilePath(this, uri).let {
+	private fun Uri.toImagePath(): String {
+		GalleryImporter.getFilePath(this@CreateActivity, this).let {
 			if (it.isNotBlank())
 				return BitmapUtil.rotateAndCompressImage(it)
 		}
@@ -192,7 +192,7 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 		when {
 			url.isBlank() -> ToastUtil.showToast(StringUtil.getString(R.string.msg_vacant_url))
 			!NetworkUtil.isConnected(this) -> ToastUtil.showToast(StringUtil.getString(R.string.err_network_disconnect))
-			else -> convertBitmap(url)
+			else -> addImage(url)
 		}
 
 		hideKeyboard()
@@ -202,11 +202,11 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 		inputMethodManager.hideSoftInputFromWindow(binding.root.windowToken, 0)
 	}
 
-	private fun convertBitmap(url: String) = with(memoViewModel) {
+	private fun addImage(url: String) = with(memoViewModel) {
 		UrlImporter.convertBitmap(
 			this@CreateActivity, url,
 			success = { bitmap ->
-				addBitmapToRecyclerView(bitmap!!)
+				addBitmapAtRecyclerView(bitmap!!)
 				memoViewModel.hideLoadingBar()
 				clearUrlPath()
 				focusToBottom()
@@ -219,7 +219,7 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 		showLoadingBar()
 	}
 
-	private fun addBitmapToRecyclerView(bitmap: Bitmap) {
+	private fun addBitmapAtRecyclerView(bitmap: Bitmap) {
 		previewRecyclerAdapter.addPath(
 			BitmapUtil.bitmapToImageFile(this@CreateActivity, bitmap)
 		)
