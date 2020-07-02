@@ -13,7 +13,7 @@ import java.io.FileOutputStream
  */
 object BitmapUtil {
 	fun bitmapToImageFile(context: Context, bitmap: Bitmap): String {
-		val imageFile = FileUtil.createJpgFile(context)
+		val imageFile = FileUtil.createJpgFileExternal(context)
 		return compressBitmapToImageFile(imageFile.absolutePath, bitmap)
 	}
 

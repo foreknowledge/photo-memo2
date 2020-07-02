@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
@@ -9,7 +8,7 @@ android {
 
   defaultConfig {
     applicationId "com.foreknowledge.photomemo2"
-    minSdkVersion 21
+    minSdkVersion 23
     targetSdkVersion 29
     versionCode 1
     versionName "1.0"
@@ -24,10 +23,10 @@ android {
     }
   }
 
-  dataBinding {
-    enabled = true
+  buildFeatures {
+    dataBinding = true
   }
-
+  
 }
 
 dependencies {

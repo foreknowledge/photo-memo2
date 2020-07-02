@@ -23,4 +23,9 @@ object PermissionUtil {
 
 		return false
 	}
+
+	@TargetApi(Build.VERSION_CODES.M)
+	fun isPermissionGranted(context: Context): Boolean {
+		return !isPermissionDenied(context)
+	}
 }

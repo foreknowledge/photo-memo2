@@ -15,7 +15,7 @@ object CameraImporter {
 	private lateinit var file: File
 
 	fun switchToCamera(activity: Activity) {
-		file = FileUtil.createJpgFile(activity)
+		file = FileUtil.createJpgFileExternal(activity)
 		val uri = FileProvider.getUriForFile(activity, "${activity.packageName}.fileprovider", file)
 
 		val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
