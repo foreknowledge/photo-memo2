@@ -25,8 +25,8 @@ object DownloadUtil {
 
     private var onDownloadListener: OnDownloadListener? = null
 
-    fun downloadImage(context: Context, filePath: String, onSuccess: () -> Unit) {
-        init(filePath, onSuccess)
+    fun downloadImage(context: Context, filePath: String, onComplete: () -> Unit) {
+        init(filePath, onComplete)
         throwExceptionIfFilePathIsBlank()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
@@ -35,11 +35,11 @@ object DownloadUtil {
             downloadFileLowerVersion(context)
     }
 
-    private fun init(filePath: String, onSuccess: () -> Unit) {
+    private fun init(filePath: String, onComplete: () -> Unit) {
         this.filePath = filePath
         this.onDownloadListener = object: OnDownloadListener {
-            override fun onSuccess() {
-                onSuccess()
+            override fun onComplete() {
+                onComplete()
             }
         }
 
@@ -69,7 +69,7 @@ object DownloadUtil {
             resolver.openOutputStream(uri).use {
                 Files.copy(Paths.get(filePath), it)
             }
-            onDownloadListener?.onSuccess()
+            onDownloadListener?.onComplete()
         }
     }
 
@@ -98,7 +98,7 @@ object DownloadUtil {
 
     private fun scanMedia(context: Context, paths: Array<String>) {
         MediaScannerConnection.scanFile(context, paths, null) { _, _ ->
-            onDownloadListener?.onSuccess()
+            onDownloadListener?.onComplete()
         }
     }
 }

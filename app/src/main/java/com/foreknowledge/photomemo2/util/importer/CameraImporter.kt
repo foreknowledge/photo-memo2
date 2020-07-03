@@ -16,6 +16,9 @@ object CameraImporter {
 
 	fun switchToCamera(activity: Activity) {
 		file = FileUtil.createJpgFileExternal(activity)
+
+		// uri 데이터 형태 = content://{authority}/{파일의 디렉토리}/{파일명}
+		// ex) content://com.foreknowledge.photomemo2.fileprovider/Pictures/sample_image.jpg
 		val uri = FileProvider.getUriForFile(activity, "${activity.packageName}.fileprovider", file)
 
 		val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
