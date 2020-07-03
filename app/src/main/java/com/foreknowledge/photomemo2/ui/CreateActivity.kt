@@ -145,12 +145,6 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 			return
 		}
 
-		// 권한 체크
-		if (PermissionUtil.isPermissionDenied(this)) {
-			ToastUtil.showToast(StringUtil.getString(R.string.err_permission_denied))
-			return
-		}
-
 		val options = StringUtil.getStringArray(R.array.option_add_image)
 
 		AlertDialog.Builder(this)

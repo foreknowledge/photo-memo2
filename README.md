@@ -37,6 +37,5 @@ git clone https://github.com/foreknowledge/PhotoMemo2.git
 - [Retrofit](https://square.github.io/retrofit) 
 - [Glide](https://github.com/bumptech/glide)
 - [Exifinterface](https://developer.android.com/reference/android/support/media/ExifInterface)
-- [AutoPermissions](https://github.com/pedroSG94/AutoPermissions)
 - [PhotoView](https://github.com/chrisbanes/PhotoView)
 - [TedImagePicker](https://github.com/ParkSangGwon/TedImagePicker)

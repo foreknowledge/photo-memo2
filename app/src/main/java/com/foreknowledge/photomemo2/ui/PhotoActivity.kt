@@ -10,10 +10,7 @@ import com.foreknowledge.photomemo2.R
 import com.foreknowledge.photomemo2.adapter.PhotoViewPagerAdapter
 import com.foreknowledge.photomemo2.base.BaseActivity
 import com.foreknowledge.photomemo2.databinding.ActivityPhotoBinding
-import com.foreknowledge.photomemo2.util.DownloadUtil
-import com.foreknowledge.photomemo2.util.PermissionUtil
-import com.foreknowledge.photomemo2.util.StringUtil
-import com.foreknowledge.photomemo2.util.ToastUtil
+import com.foreknowledge.photomemo2.util.*
 
 @Suppress("UNUSED_PARAMETER")
 class PhotoActivity : BaseActivity<ActivityPhotoBinding>(R.layout.activity_photo) {
@@ -56,22 +53,12 @@ class PhotoActivity : BaseActivity<ActivityPhotoBinding>(R.layout.activity_photo
 	}
 
 	fun downloadImage(view: View) {
-		// 권한 체크
-		if (PermissionUtil.isPermissionGranted(this)) {
-			downloadImageWithHandling()
-		} else {
-			Log.d(TAG, "downloadImage(): Permission denied")
-			ToastUtil.showToast(StringUtil.getString(R.string.err_permission_denied), this)
-		}
-	}
-
-	private fun downloadImageWithHandling() {
 		try {
 			val filePath = photoViewPagerAdapter.currentList[currentPosition]
 			DownloadUtil.downloadImage(this, filePath) { showToastOnMain() }
 		} catch (e: IllegalArgumentException) {
 			Log.d(TAG, "download Image Error: ${e.message}")
-			ToastUtil.showToast(StringUtil.getString(R.string.download_fail), this)
+			ToastUtil.showToast(StringUtil.getString(R.string.err_download_fail), this)
 		}
 	}
 
