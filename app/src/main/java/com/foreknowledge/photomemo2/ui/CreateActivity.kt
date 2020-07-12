@@ -151,13 +151,12 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 			.setTitle(StringUtil.getString(R.string.text_add_image))
 			.setItems(options) { _, index ->
 				when (index) {
-					0 -> {
+					GALLERY -> {
 						val leftCount = MAX_IMAGE_COUNT - previewRecyclerAdapter.itemCount
 						GalleryImporter.startMultiImage(this, leftCount) { addSelectedImage(it) }
-					} // 갤러리
-
-					1 -> CameraImporter.switchToCamera(this) // 카메라
-					2 -> UrlImporter.fadeIn(binding.urlInputBox.root) // url
+					}
+					CAMERA -> CameraImporter.switchToCamera(this)
+					URL -> UrlImporter.fadeIn(binding.urlInputBox.root)
 				}
 			}.show()
 	}
@@ -225,5 +224,11 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 
 	private fun focusToBottom() = with(binding) {
 		scrollView.post { scrollView.fullScroll(ScrollView.FOCUS_DOWN) }
+	}
+
+	companion object {
+		private const val GALLERY = 0
+		private const val CAMERA = 1
+		private const val URL = 2
 	}
 }
