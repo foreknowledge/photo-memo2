@@ -40,10 +40,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 	}
 
 	private fun startDetailActivity(memo: Memo) {
-		startActivity(
-			Intent(this@MainActivity, DetailActivity::class.java)
-				.apply { putExtra(EXTRA_MEMO_ID, memo.id) }
-		)
+		Intent(this@MainActivity, DetailActivity::class.java)
+			.apply { putExtra(EXTRA_MEMO_ID, memo.id) }
+			.also { startActivity(it) }
 	}
 
 	private fun subscribeUI() {
@@ -61,6 +60,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 		viewModel.initMemoList()
 	}
 
-	fun createMemo(view: View) =
-		startActivity(Intent(this, CreateActivity::class.java))
+	fun createMemo(view: View) {
+		Intent(this, CreateActivity::class.java)
+			.also { startActivity(it) }
+	}
 }

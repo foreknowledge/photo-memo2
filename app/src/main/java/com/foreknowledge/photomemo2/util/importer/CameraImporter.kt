@@ -21,10 +21,9 @@ object CameraImporter {
 		// ex) content://com.foreknowledge.photomemo2.fileprovider/Pictures/sample_image.jpg
 		val uri = FileProvider.getUriForFile(activity, "${activity.packageName}.fileprovider", file)
 
-		val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-		intent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
-
-		activity.startActivityForResult(intent, RequestCode.CHOOSE_CAMERA_IMAGE)
+		Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+			.apply { putExtra(MediaStore.EXTRA_OUTPUT, uri) }
+			.also { activity.startActivityForResult(it, RequestCode.CHOOSE_CAMERA_IMAGE) }
 	}
 
 	fun getFilePath() = file.absolutePath ?: ""

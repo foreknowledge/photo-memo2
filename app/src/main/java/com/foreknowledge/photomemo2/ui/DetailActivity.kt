@@ -46,13 +46,12 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
 	}
 
 	private fun startPhotoActivity(photoPath: String) {
-		startActivity(
-			Intent(this@DetailActivity, PhotoActivity::class.java)
-				.apply {
-					putExtra(EXTRA_PHOTOS, viewModel.currentMemo.value?.photoPaths)
-					putExtra(EXTRA_PHOTO_POSITION, photoRecyclerAdapter.getItemPosition(photoPath))
-				}
-		)
+		Intent(this@DetailActivity, PhotoActivity::class.java)
+			.apply {
+				putExtra(EXTRA_PHOTOS, viewModel.currentMemo.value?.photoPaths)
+				putExtra(EXTRA_PHOTO_POSITION, photoRecyclerAdapter.getItemPosition(photoPath))
+			}
+			.also { startActivity(it) }
 	}
 
 	private fun subscribeUI() = with(viewModel) {
@@ -67,10 +66,12 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
 		msg.observe(owner, Observer { ToastUtil.showToast(it) })
 	}
 
-	fun startCreateActivity(view: View) =
-		startActivity(Intent(this, CreateActivity::class.java).apply {
-			putExtra(EXTRA_MEMO_ID, viewModel.currentMemo.value!!.id)
-		})
+	fun startCreateActivity(view: View) {
+		Intent(this, CreateActivity::class.java)
+			.apply {
+				putExtra(EXTRA_MEMO_ID, viewModel.currentMemo.value!!.id)
+			}.also { startActivity(it) }
+	}
 
 	fun showAlertDialog(view: View) {
 		AlertDialog.Builder(this)
