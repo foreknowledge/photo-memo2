@@ -5,7 +5,7 @@ import com.foreknowledge.photomemo2.model.data.Memo
 import com.foreknowledge.photomemo2.model.room.MemoEntity
 
 /**
- * Create by Yeji on 22,April,2020.
+ * Created by Yeji on 22,April,2020.
  */
 object MemoRepository {
 	private val memoDataSource = MemoDataSource(GlobalApplication.getContext())

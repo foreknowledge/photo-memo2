@@ -9,7 +9,7 @@ import java.io.File
 import java.io.FileOutputStream
 
 /**
- * Create by Yeji on 27,April,2020.
+ * Created by Yeji on 27,April,2020.
  */
 object BitmapUtil {
 	fun bitmapToImageFile(context: Context, bitmap: Bitmap): String {

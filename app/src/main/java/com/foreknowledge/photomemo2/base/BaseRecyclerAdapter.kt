@@ -8,7 +8,7 @@ import com.foreknowledge.photomemo2.listener.OnItemClickListener
 import com.foreknowledge.photomemo2.listener.OnItemSingleClickListener
 
 /**
- * Create by Yeji on 22,April,2020.
+ * Created by Yeji on 22,April,2020.
  */
 abstract class BaseRecyclerAdapter<T>(
 		@LayoutRes private val layoutResId: Int,

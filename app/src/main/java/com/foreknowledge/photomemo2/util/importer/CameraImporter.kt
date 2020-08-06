@@ -9,7 +9,7 @@ import com.foreknowledge.photomemo2.util.FileUtil
 import java.io.File
 
 /**
- * Create by Yeji on 27,April,2020.
+ * Created by Yeji on 27,April,2020.
  */
 object CameraImporter {
 	private lateinit var file: File

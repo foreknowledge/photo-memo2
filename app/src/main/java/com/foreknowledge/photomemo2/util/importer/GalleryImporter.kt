@@ -9,7 +9,7 @@ import gun0912.tedimagepicker.builder.TedImagePicker
 import java.io.File
 
 /**
- * Create by Yeji on 27,April,2020.
+ * Created by Yeji on 27,April,2020.
  */
 object GalleryImporter {
 	fun startMultiImage(

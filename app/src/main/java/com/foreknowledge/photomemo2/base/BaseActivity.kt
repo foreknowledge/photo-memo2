@@ -7,7 +7,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 
 /**
- * Create by Yeji on 22,April,2020.
+ * Created by Yeji on 22,April,2020.
  */
 abstract class BaseActivity<B: ViewDataBinding>(@LayoutRes val layoutId: Int) : AppCompatActivity() {
 	protected lateinit var binding: B

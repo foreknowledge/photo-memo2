@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import com.foreknowledge.photomemo2.model.data.Memo
 
 /**
- * Create by Yeji on 22,April,2020.
+ * Created by Yeji on 22,April,2020.
  */
 @Entity
 class MemoEntity (

@@ -14,7 +14,7 @@ import java.nio.file.Paths
 import kotlin.IllegalArgumentException
 
 /**
- * Create by Yeji on 30,June,2020.
+ * Created by Yeji on 30,June,2020.
  */
 object DownloadUtil {
     private const val DIRECTORY_NAME = "PhotoMemo"

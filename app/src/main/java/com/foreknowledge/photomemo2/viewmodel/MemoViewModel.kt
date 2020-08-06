@@ -13,7 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 /**
- * Create by Yeji on 23,April,2020.
+ * Created by Yeji on 23,April,2020.
  */
 class MemoViewModel : ViewModel() {
 	private val repository = MemoRepository

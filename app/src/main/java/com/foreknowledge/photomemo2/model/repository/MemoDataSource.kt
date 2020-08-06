@@ -6,7 +6,7 @@ import com.foreknowledge.photomemo2.model.room.DatabaseService
 import com.foreknowledge.photomemo2.model.room.MemoEntity
 
 /**
- * Create by Yeji on 22,April,2020.
+ * Created by Yeji on 22,April,2020.
  */
 class MemoDataSource(context: Context) {
 	private val memoDao = DatabaseService.getInstance(context).memoDao()

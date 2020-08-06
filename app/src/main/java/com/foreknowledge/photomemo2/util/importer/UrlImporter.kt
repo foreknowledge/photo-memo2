@@ -15,7 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 /**
- * Create by Yeji on 27,April,2020.
+ * Created by Yeji on 27,April,2020.
  */
 object UrlImporter {
 	private val coroutineScope = CoroutineScope(Dispatchers.Main)

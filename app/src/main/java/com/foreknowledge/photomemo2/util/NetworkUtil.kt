@@ -5,7 +5,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 
 /**
- * Create by Yeji on 30,April,2020.
+ * Created by Yeji on 30,April,2020.
  */
 @Suppress("DEPRECATION")
 object NetworkUtil {

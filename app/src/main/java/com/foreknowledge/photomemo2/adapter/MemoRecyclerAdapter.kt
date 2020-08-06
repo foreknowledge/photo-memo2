@@ -6,7 +6,7 @@ import com.foreknowledge.photomemo2.base.BaseRecyclerAdapter
 import com.foreknowledge.photomemo2.model.data.Memo
 
 /**
- * Create by Yeji on 22,April,2020.
+ * Created by Yeji on 22,April,2020.
  */
 class MemoRecyclerAdapter: BaseRecyclerAdapter<Memo>(R.layout.item_memo, diffCallback) {
     companion object {

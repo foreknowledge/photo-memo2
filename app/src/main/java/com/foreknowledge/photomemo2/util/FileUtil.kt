@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 /**
- * Create by Yeji on 27,April,2020.
+ * Created by Yeji on 27,April,2020.
  */
 object FileUtil {
 	fun createJpgFileExternal(context: Context): File {

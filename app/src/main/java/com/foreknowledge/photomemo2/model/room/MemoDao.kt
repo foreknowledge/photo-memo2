@@ -3,7 +3,7 @@ package com.foreknowledge.photomemo2.model.room
 import androidx.room.*
 
 /**
- * Create by Yeji on 22,April,2020.
+ * Created by Yeji on 22,April,2020.
  */
 @Dao
 interface MemoDao {

@@ -12,7 +12,7 @@ import com.foreknowledge.photomemo2.listener.OnItemMoveListener
 import com.foreknowledge.photomemo2.util.FileUtil
 
 /**
- * Create by Yeji on 27,April,2020.
+ * Created by Yeji on 27,April,2020.
  */
 class PreviewRecyclerAdapter : RecyclerView.Adapter<BaseViewHolder<String>>(), OnItemMoveListener {
 	private val items = mutableListOf<String>()

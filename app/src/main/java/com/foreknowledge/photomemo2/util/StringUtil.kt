@@ -5,7 +5,7 @@ import androidx.annotation.StringRes
 import com.foreknowledge.photomemo2.GlobalApplication
 
 /**
- * Create by Yeji on 26,April,2020.
+ * Created by Yeji on 26,April,2020.
  */
 object StringUtil {
     fun getString(@StringRes resId: Int) =

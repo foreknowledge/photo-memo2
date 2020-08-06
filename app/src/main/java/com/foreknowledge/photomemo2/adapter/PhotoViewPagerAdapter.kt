@@ -9,7 +9,7 @@ import com.foreknowledge.photomemo2.util.StringDiffCallback
 import com.github.chrisbanes.photoview.PhotoView
 
 /**
- * Create by Yeji on 28,April,2020.
+ * Created by Yeji on 28,April,2020.
  */
 class PhotoViewPagerAdapter(
     private val context: Context

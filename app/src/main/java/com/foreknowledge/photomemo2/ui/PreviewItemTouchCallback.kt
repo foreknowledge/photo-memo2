@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.foreknowledge.photomemo2.listener.OnItemMoveListener
 
 /**
- * Create by Yeji on 29,April,2020.
+ * Created by Yeji on 29,April,2020.
  */
 class PreviewItemTouchCallback(
 		private val onItemMoveListener: OnItemMoveListener

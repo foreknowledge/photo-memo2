@@ -12,7 +12,7 @@ import com.foreknowledge.photomemo2.BR
 import com.foreknowledge.photomemo2.listener.OnItemClickListener
 
 /**
- * Create by Yeji on 22,April,2020.
+ * Created by Yeji on 22,April,2020.
  */
 abstract class BaseViewHolder<T>(
 		@LayoutRes layoutResId: Int,
