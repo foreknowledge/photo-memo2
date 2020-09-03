@@ -1,8 +1,8 @@
-# PhotoMemo2
+# Photo Memo 2
 
 ## 개요
 
-[PhotoMemo](https://github.com/foreknowledge/PhotoMemo)에서 만든 메모장 앱의 내부 구조를 바꾸고 기능도 추가한 ver.2 메모장 애플리케이션입니다.
+[Photo Memo](https://github.com/foreknowledge/photo-memo)에서 만든 메모장 앱의 내부 구조를 바꾸고 기능도 추가한 ver.2 메모장 애플리케이션입니다.
 
 ### 기능
 
@@ -23,7 +23,7 @@
 이 저장소를 복제해서 **Android Studio**에 import 합니다.
 
 ```bash
-git clone https://github.com/foreknowledge/PhotoMemo2.git
+git clone https://github.com/foreknowledge/photo-memo2.git
 ```
 
 ## 사용한 라이브러리
