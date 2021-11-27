@@ -29,6 +29,10 @@ import com.foreknowledge.photomemo2.util.importer.CameraImporter
 import com.foreknowledge.photomemo2.util.importer.GalleryImporter
 import com.foreknowledge.photomemo2.util.importer.UrlImporter
 import com.foreknowledge.photomemo2.viewmodel.MemoViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Suppress("UNUSED_PARAMETER")
 class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_create) {
@@ -162,8 +166,17 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 	}
 
 	private fun addSelectedImage(list: List<Uri>) {
-		previewRecyclerAdapter.addPaths(list.map { it.toImagePath() })
-		focusToBottom()
+		memoViewModel.showLoadingBar()
+
+		CoroutineScope(Dispatchers.Default).launch {
+			val copiedImageList = list.map { it.toImagePath() }
+			withContext(Dispatchers.Main) {
+				previewRecyclerAdapter.addPaths(copiedImageList)
+				focusToBottom()
+
+				memoViewModel.hideLoadingBar()
+			}
+		}
 	}
 
 	private fun Uri.toImagePath(): String {
