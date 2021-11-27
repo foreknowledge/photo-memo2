@@ -25,17 +25,13 @@ object GalleryImporter {
 			.startMultiImage { list: List<Uri> -> completed(list) }
 	}
 
-	fun getFilePath(context: Context, data: Uri): String {
+	fun copyFile(context: Context, data: Uri): String {
 		data.path?.let {
-			return copyImageAndReturnFilePath(context, it)
+			val newFile = FileUtil.createJpgFileExternal(context)
+			File(it).copyTo(newFile, true)
+
+			return newFile.absolutePath
 		}
 		return ""
-	}
-
-	private fun copyImageAndReturnFilePath(context: Context, originalFilePath: String): String {
-		val newFile = FileUtil.createJpgFileExternal(context)
-		File(originalFilePath).copyTo(newFile, true)
-
-		return newFile.absolutePath
 	}
 }

@@ -180,7 +180,7 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 	}
 
 	private fun Uri.toImagePath(): String {
-		GalleryImporter.getFilePath(this@CreateActivity, this).let {
+		GalleryImporter.copyFile(this@CreateActivity, this).let {
 			if (it.isNotBlank())
 				return BitmapUtil.rotateAndCompressImage(it)
 		}
