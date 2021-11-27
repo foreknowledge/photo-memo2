@@ -11,7 +11,6 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ScrollView
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -78,11 +77,11 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 
 	private fun subscribeUI() = with(memoViewModel) {
 		val owner = this@CreateActivity
-		currentMemo.observe(owner, Observer { memo ->
+		currentMemo.observe(owner) { memo ->
 			binding.item = memo
 			replaceItemsWithNullCheck(memo)
-		})
-		msg.observe(owner, Observer { ToastUtil.showToast(it) })
+		}
+		msg.observe(owner) { ToastUtil.showToast(it) }
 	}
 
 	private fun replaceItemsWithNullCheck(memo: Memo?) {
