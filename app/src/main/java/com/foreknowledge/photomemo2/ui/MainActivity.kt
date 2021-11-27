@@ -64,4 +64,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 		Intent(this, CreateActivity::class.java)
 			.also { startActivity(it) }
 	}
+
+	override fun onDestroy() {
+		// 안 쓰는 이미지 파일 제거
+		viewModel.deleteUnusedImageFiles(this)
+
+		super.onDestroy()
+	}
 }
