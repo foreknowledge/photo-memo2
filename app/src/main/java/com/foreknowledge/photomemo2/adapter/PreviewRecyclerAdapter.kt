@@ -16,9 +16,6 @@ import com.foreknowledge.photomemo2.util.FileUtil
  */
 class PreviewRecyclerAdapter : RecyclerView.Adapter<BaseViewHolder<String>>(), OnItemMoveListener {
 	private val items = mutableListOf<String>()
-	private val actionHistory = mutableListOf<Action>()
-
-	private data class Action(val type: Int, val imagePath: String)
 
 	private var onItemDragListener: OnItemDragListener? = null
 
@@ -30,33 +27,15 @@ class PreviewRecyclerAdapter : RecyclerView.Adapter<BaseViewHolder<String>>(), O
 		}
 	}
 
-	fun getImages(): List<String> {
-		for (action in actionHistory)
-			if (action.type == FLAG_DELETE_IMAGE)
-				FileUtil.deleteFile(action.imagePath)
-
-		return items
-	}
-
-	fun restoreImages(): List<String> {
-		for (action in actionHistory)
-			if (action.type == FLAG_ADD_IMAGE)
-				FileUtil.deleteFile(action.imagePath)
-
-		return items
-	}
+	fun getImages(): List<String> = items.toList()
 
 	fun addPath(path: String) {
-		actionHistory.add(Action(FLAG_ADD_IMAGE, path))
 		items.add(path)
 		notifyDataSetChanged()
 	}
 
 	fun addPaths(paths: List<String>) {
-		paths.forEach {
-			actionHistory.add(Action(FLAG_ADD_IMAGE, it))
-			items.add(it)
-		}
+		paths.forEach { items.add(it) }
 		notifyDataSetChanged()
 	}
 
@@ -70,7 +49,6 @@ class PreviewRecyclerAdapter : RecyclerView.Adapter<BaseViewHolder<String>>(), O
 	override fun onBindViewHolder(holder: BaseViewHolder<String>, position: Int) {
 		holder.bind(items[position], object: OnItemClickListener<String>{
 			override fun onClick(item: String) {
-				actionHistory.add(Action(FLAG_DELETE_IMAGE, item))
 				items.remove(item)
 				notifyDataSetChanged()
 			}
@@ -94,11 +72,6 @@ class PreviewRecyclerAdapter : RecyclerView.Adapter<BaseViewHolder<String>>(), O
 		items.clear()
 		items.addAll(newItems)
 		notifyDataSetChanged()
-	}
-
-	companion object {
-		const val FLAG_ADD_IMAGE = 1
-		const val FLAG_DELETE_IMAGE = -1
 	}
 }
 

@@ -56,7 +56,7 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 		binding.run {
 			lifecycleOwner = this@CreateActivity
 			viewModel = memoViewModel
-			goBefore.setOnClickListener { restoreAndFinish() }
+			goBefore.setOnClickListener { onBackPressed() }
 			previewRecyclerView.apply {
 				setHasFixedSize(true)
 				layoutManager = GridLayoutManager(context, 4)
@@ -73,11 +73,6 @@ class CreateActivity : BaseActivity<ActivityCreateBinding>(R.layout.activity_cre
 
 	override fun onBackPressed() {
 		super.onBackPressed()
-		restoreAndFinish()
-	}
-
-	private fun restoreAndFinish() {
-		previewRecyclerAdapter.restoreImages()
 		finish()
 	}
 
