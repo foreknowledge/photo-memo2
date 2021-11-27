@@ -8,7 +8,7 @@ const val EXTRA_MEMO_ID = "memo_id"
 const val EXTRA_PHOTOS = "photos"
 const val EXTRA_PHOTO_POSITION = "photo_position"
 
-const val MAX_IMAGE_COUNT = 20
+const val MAX_IMAGE_COUNT = 30
 
 const val MSG_IMAGE_FULL = "이미지 첨부는 ${MAX_IMAGE_COUNT}개까지 가능합니다."
 
